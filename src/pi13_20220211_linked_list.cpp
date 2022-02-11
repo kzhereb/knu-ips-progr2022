@@ -35,7 +35,7 @@ void append_item(ListNode* list_head, int data) {
 }
 // print list
 void print_list(ListNode* list_head) {
-	ListNode* current = list_head;
+	ListNode* current = list_head->next; // first node is not used to store data so we need to skip it
 	while(current != nullptr) {
 		std::cout<<current->data<<" ";
 		current = current->next;
@@ -52,6 +52,7 @@ int main() {
 
 	append_item(list_head, 1);
 	append_item(list_head, 5);
+	append_item(list_head, 0);
 	append_item(list_head, 7);
 
 	print_list(list_head);
