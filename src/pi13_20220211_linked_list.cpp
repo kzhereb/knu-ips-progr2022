@@ -58,12 +58,21 @@ void print_list(ListNode* list_head) {
 
 
 //before: value = 23
-void change_value(int value) {
+void change_value_not_working(int value) {
 	//before: value = 23
 	value = 125;
 	//after: value = 125
 }
 //after: value = 23 (copy was changed, original not changed)
+
+//before: value = 23
+void change_value(int& value) {
+	//before: value = 23
+	value = 125;
+	//after: value = 125
+}
+//after: value = 125 (original was changed, because it was passed by reference)
+
 
 //before: p_value = A2, *A2 = 23 = another_value
 //WRONG! after: p_value = A3, *A3 = 123 = local_value; another_value = 23
@@ -104,6 +113,9 @@ void test_pointers() {
 	//after: p_value = A2; *A2 = 23 = another_value; p_value=>another_value
 	std::cout << "value from ptr=" << (*p_value) << ", value=" << value
 			<< ",another_value=" << another_value << std::endl;
+	change_value_not_working(another_value);
+	std::cout << "value from ptr=" << (*p_value) << ", value=" << value
+			<< ",another_value=" << another_value << std::endl;
 	change_value(another_value);
 	std::cout << "value from ptr=" << (*p_value) << ", value=" << value
 			<< ",another_value=" << another_value << std::endl;
@@ -120,7 +132,7 @@ void test_pointers() {
 
 int main() {
 
-	//test_pointers();
+	test_pointers();
 
 
 	ListNode* list_head = create_empty_list();
