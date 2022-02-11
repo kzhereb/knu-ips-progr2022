@@ -23,19 +23,17 @@ ListNode* create_empty_list() {
 	return nullptr;
 }
 // add item to list
-void append_item(ListNode** list_head, int data) {
+void append_item(ListNode*& list_head, int data) {
 	ListNode* new_node = new ListNode;
 	new_node->data  = data;
 	new_node->next = nullptr;
 
-	// before: list_head => nullptr
-	// after: list_head => new_node => (data=data, next=nullptr)
-	if (*list_head == nullptr) {
+	if (list_head == nullptr) {
 		new_node->prev = nullptr;
-		*list_head = new_node;
+		list_head = new_node;
 		return;
 	}
-	ListNode* current = *list_head;
+	ListNode* current = list_head;
 	while(current->next != nullptr) {
 		current = current->next;
 	}
@@ -132,16 +130,15 @@ void test_pointers() {
 
 int main() {
 
-	test_pointers();
+	//test_pointers();
 
 
 	ListNode* list_head = create_empty_list();
-	ListNode** p_head = &list_head;
 
-	append_item(p_head, 1);
-	append_item(p_head, 5);
-	append_item(p_head, 0);
-	append_item(p_head, 7);
+	append_item(list_head, 1);
+	append_item(list_head, 5);
+	append_item(list_head, 0);
+	append_item(list_head, 7);
 
 	print_list(list_head);
 
