@@ -28,11 +28,12 @@ void append_item(ListNode** list_head, int data) {
 	new_node->data  = data;
 	new_node->next = nullptr;
 
-	// before: list_head -> nullptr
-	// after: list_head -> new_node -> (data=data, next=nullptr)
+	// before: list_head => nullptr
+	// after: list_head => new_node => (data=data, next=nullptr)
 	if (*list_head == nullptr) {
 		new_node->prev = nullptr;
-		list_head = &new_node;
+		*list_head = new_node;
+		return;
 	}
 	ListNode* current = *list_head;
 	while(current->next != nullptr) {
