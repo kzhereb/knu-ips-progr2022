@@ -56,6 +56,7 @@ void print_list(ListNode* list_head) {
 // remove item from list
 // remove entire list
 
+
 //before: value = 23
 void change_value(int value) {
 	//before: value = 23
@@ -82,41 +83,44 @@ void change_value_through_pointer(int* p_value) {
 }
 //after: p_value = A2, *A2 = 123; p_value=>another_value; another_value = 123
 
-int main() {
 
+void test_pointers() {
 	int value = 5;
-	int* p_value = &value;
-
-	std::cout<<"value from ptr="<<(*p_value)<<std::endl;
+	int *p_value = &value;
+	std::cout << "value from ptr=" << (*p_value) << std::endl;
 	value = 7;
-	std::cout<<"value from ptr="<<(*p_value)<<std::endl;
-
+	std::cout << "value from ptr=" << (*p_value) << std::endl;
 	int another_value = 15;
 	//before: p_value = A1, *A1 = 7 = value; p_value=>value;
 	p_value = &another_value;
 	//after: p_value = A2, *A2 = 15 = another_value; p_value=>another_value; value = 7
-
-	std::cout<<"value from ptr="<<(*p_value)<<std::endl;
+	std::cout << "value from ptr=" << (*p_value) << std::endl;
 	value = 9;
-	std::cout<<"value from ptr="<<(*p_value)<<std::endl;
+	std::cout << "value from ptr=" << (*p_value) << std::endl;
 	another_value = 17;
-	std::cout<<"value from ptr="<<(*p_value)<<std::endl;
-
+	std::cout << "value from ptr=" << (*p_value) << std::endl;
 	//before: p_value = A2, *A2 = 17 = another_value; p_value=>another_value
 	*p_value = 23;
 	//after: p_value = A2; *A2 = 23 = another_value; p_value=>another_value
-	std::cout<<"value from ptr="<<(*p_value)<<", value="<<value<<",another_value="<<another_value<<std::endl;
-
+	std::cout << "value from ptr=" << (*p_value) << ", value=" << value
+			<< ",another_value=" << another_value << std::endl;
 	change_value(another_value);
-	std::cout<<"value from ptr="<<(*p_value)<<", value="<<value<<",another_value="<<another_value<<std::endl;
-
+	std::cout << "value from ptr=" << (*p_value) << ", value=" << value
+			<< ",another_value=" << another_value << std::endl;
 	change_value_of_pointer(p_value);
-	std::cout<<"value from ptr="<<(*p_value)<<", value="<<value<<",another_value="<<another_value<<std::endl;
-
+	std::cout << "value from ptr=" << (*p_value) << ", value=" << value
+			<< ",another_value=" << another_value << std::endl;
 	change_value_through_pointer(p_value);
-	std::cout<<"value from ptr="<<(*p_value)<<", value="<<value<<",another_value="<<another_value<<std::endl;
+	std::cout << "value from ptr=" << (*p_value) << ", value=" << value
+			<< ",another_value=" << another_value << std::endl;
+}
 
 
+
+
+int main() {
+
+	//test_pointers();
 
 
 	ListNode* list_head = create_empty_list();
