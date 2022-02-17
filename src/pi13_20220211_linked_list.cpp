@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+namespace pi13_20220211_linked_list {
+
 struct ListNode {
 	int data;
 	ListNode* prev;
@@ -146,3 +148,4 @@ int main() {
 	return 0;
 }
 
+}
