@@ -57,6 +57,16 @@ void add_item_after_position(ListNode*& list_head, int data, std::size_t positio
 		list_head = new_node;
 		return;
 	}
+
+	//insert at start:
+	if (position == 0) {
+		new_node->prev = nullptr;
+		new_node->next = list_head;
+		list_head->prev = new_node;
+		list_head = new_node;
+		return;
+	}
+
 	ListNode* current = list_head;
 	std::size_t current_position = 1;
 	//if position is higher than the number of nodes, just append to end
@@ -251,6 +261,11 @@ int main() {
 	remove_item_at_position(list_head, 1);
 	print_list(list_head);
 	print_reverse(list_head);
+
+	add_item_after_position(list_head, 1, 0);
+	print_list(list_head);
+	print_reverse(list_head);
+
 
 	return 0;
 }
