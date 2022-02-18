@@ -82,6 +82,19 @@ void print_list(ListNode* list_head) {
 	std::cout<<std::endl;
 }
 
+void print_reverse(ListNode* list_head) {
+	ListNode* current = list_head;
+	if (current == nullptr) { std::cout<<std::endl; return; }
+	while (current->next != nullptr) {
+		current = current->next;
+	}
+	while(current != nullptr) {
+		std::cout<<current->data<<" ";
+		current = current->prev;
+	}
+	std::cout<<std::endl;
+}
+
 // remove item from list
 // remove entire list
 
@@ -172,9 +185,11 @@ int main() {
 	append_item(list_head, 7);
 
 	print_list(list_head);
+	print_reverse(list_head);
 
 	add_item_after_position(list_head, 9, 2);
 	print_list(list_head);
+	print_reverse(list_head);
 
 
 	return 0;
