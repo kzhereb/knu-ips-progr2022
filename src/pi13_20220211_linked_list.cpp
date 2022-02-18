@@ -84,32 +84,42 @@ void add_item_after_position(ListNode*& list_head, int data, std::size_t positio
 
 // remove item from list after position (might be a bit buggy though)
 // function written by Mykola Vlasenko
-void remove_item_at_position(ListNode*& list_head, int position) {
+void remove_item_at_position(ListNode*& list_head, std::size_t position) {
 	if (list_head == nullptr) {
 		return;
 	}
 	ListNode* current = list_head;
-	int current_position = 1;
-	//if position is higher than the number of nodes - do nothing?
-	while((current->next != nullptr) && (current_position < position)) {
+	int current_position = 0;
+	//if position is higher than the number of nodes - don't remove, output error
+	while((current != nullptr) && (current_position < position)) {
 		current = current->next;
 		current_position++;
 	}
 
-	if (current == list_head) {
+	if (current == nullptr) {
+		std::cout << "ERROR: trying to delete nonexistent element" << std::endl;
+		return;
+	}
+
+	if (current == list_head) { //remove from start
+        if (current->next == nullptr) { //remove single item, results in empty list
+		list_head = nullptr;
+
+        } else {
 		list_head = current->next;
 		list_head->prev = nullptr;
+		}
+
 		return;
-	} else {
+	}
 
     ListNode* prev_node = current->prev;
 
-    if (current->next == nullptr) { // remove from end
+    if (current->next == nullptr) { //remove from end
 
-    	current = nullptr;
         prev_node->next = nullptr;
 
-	} else { // remove in the middle
+	} else { //remove in the middle
 
         ListNode* next_node = current->next;
 
@@ -121,9 +131,6 @@ void remove_item_at_position(ListNode*& list_head, int position) {
 
 	}
 
-
-	}
-	//	return list_head;
 }
 
 
@@ -250,11 +257,15 @@ int main() {
 	print_list(list_head);
 	print_reverse(list_head);
 
-	remove_item_at_position(list_head, 1);
+	remove_item_at_position(list_head, 0);
 	print_list(list_head);
 	print_reverse(list_head);
 
-	remove_item_at_position(list_head, 5);
+	remove_item_at_position(list_head, 4);
+	print_list(list_head);
+	print_reverse(list_head);
+
+	remove_item_at_position(list_head, 0);
 	print_list(list_head);
 	print_reverse(list_head);
 
