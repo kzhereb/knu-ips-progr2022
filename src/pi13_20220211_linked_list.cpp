@@ -103,12 +103,12 @@ void remove_item_at_position(ListNode*& list_head, std::size_t position) {
 
 	if (current == list_head) { //remove from start
         if (current->next == nullptr) { //remove single item, results in empty list
-		list_head = nullptr;
-
+			list_head = nullptr;
         } else {
-		list_head = current->next;
-		list_head->prev = nullptr;
+			list_head = current->next;
+			list_head->prev = nullptr;
 		}
+        delete current;
 
 		return;
 	}
@@ -116,20 +116,13 @@ void remove_item_at_position(ListNode*& list_head, std::size_t position) {
     ListNode* prev_node = current->prev;
 
     if (current->next == nullptr) { //remove from end
-
         prev_node->next = nullptr;
-
 	} else { //remove in the middle
-
-        ListNode* next_node = current->next;
-
-        current->prev = nullptr;
-        current->next = nullptr;
-
+		ListNode* next_node = current->next;
         prev_node->next = next_node;
         next_node->prev = prev_node;
-
 	}
+    delete current;
 
 }
 
