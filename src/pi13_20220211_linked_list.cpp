@@ -47,7 +47,7 @@ void append_item(ListNode*& list_head, int data) {
 
 // add item to list after specific position (1 is after first element,  is after second element)
 // function written by Mykola Vlasenko
-void add_item_after_position(ListNode*& list_head, int data, int position) {
+void add_item_after_position(ListNode*& list_head, int data, std::size_t position) {
 	ListNode* new_node = new ListNode;
 	new_node->data  = data;
 	new_node->next = nullptr;
@@ -58,7 +58,7 @@ void add_item_after_position(ListNode*& list_head, int data, int position) {
 		return;
 	}
 	ListNode* current = list_head;
-	int current_position = 1;
+	std::size_t current_position = 1;
 	//if position is higher than the number of nodes, just append to end
 	while((current->next != nullptr) && (current_position < position)) {
 		current = current->next;
