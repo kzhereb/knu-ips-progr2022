@@ -43,6 +43,35 @@ void append_item(ListNode*& list_head, int data) {
 	current->next = new_node;
 //	return list_head;
 }
+
+
+// add item to list after specific position (1 is after first element,  is after second element)
+// function written by Mykola Vlasenko
+void add_item_after_position(ListNode*& list_head, int data, int position) {
+	ListNode* new_node = new ListNode;
+	new_node->data  = data;
+	new_node->next = nullptr;
+
+	if (list_head == nullptr) {
+		new_node->prev = nullptr;
+		list_head = new_node;
+		return;
+	}
+	ListNode* current = list_head;
+	int current_position = 1;
+	//if position is higher than the number of nodes, just append to end
+	while((current->next != nullptr) && (current_position < position)) {
+		current = current->next;
+		current_position++;
+	}
+	//changing next/prev parameters, so that current points to new_node, and new_mode node points to the node that the current was pointing to
+	new_node->next = current->next;
+	new_node->prev = current;
+	current->next = new_node;
+//	return list_head;
+}
+
+
 // print list
 void print_list(ListNode* list_head) {
 	ListNode* current = list_head;
@@ -142,6 +171,9 @@ int main() {
 	append_item(list_head, 0);
 	append_item(list_head, 7);
 
+	print_list(list_head);
+
+	add_item_after_position(list_head, 9, 2);
 	print_list(list_head);
 
 
