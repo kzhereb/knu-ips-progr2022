@@ -126,6 +126,20 @@ void remove_item_at_position(ListNode*& list_head, std::size_t position) {
 
 }
 
+// remove entire list
+// function written by Mykola Vlasenko
+void remove_entire_list(ListNode*& list_head) {
+	ListNode* current = list_head;
+	ListNode* next_current;
+	while(current != nullptr) {
+		next_current = current->next;
+		delete current;
+		current = next_current;
+	}
+	list_head = nullptr;
+	return;
+}
+
 
 // print list
 void print_list(ListNode* list_head) {
@@ -267,6 +281,15 @@ int main() {
 	print_reverse(list_head);
 
 	add_item_after_position(list_head, 1, 0);
+	print_list(list_head);
+	print_reverse(list_head);
+
+	remove_entire_list(list_head);
+	print_list(list_head);
+	print_reverse(list_head);
+
+	append_item(list_head, 1);
+	append_item(list_head, 5);
 	print_list(list_head);
 	print_reverse(list_head);
 
