@@ -89,7 +89,7 @@ void remove_item_at_position(ListNode*& list_head, std::size_t position) {
 		return;
 	}
 	ListNode* current = list_head;
-	int current_position = 0;
+	std::size_t current_position = 0;
 	//if position is higher than the number of nodes - don't remove, output error
 	while((current != nullptr) && (current_position < position)) {
 		current = current->next;
