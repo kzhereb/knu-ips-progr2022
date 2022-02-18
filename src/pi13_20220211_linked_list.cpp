@@ -67,8 +67,9 @@ void add_item_after_position(ListNode*& list_head, int data, int position) {
 	//changing next/prev parameters, so that current points to new_node, and new_mode node points to the node that the current was pointing to
 	new_node->next = current->next;
 	new_node->prev = current;
+	current->next->prev = new_node;
 	current->next = new_node;
-//	return list_head;
+
 }
 
 
