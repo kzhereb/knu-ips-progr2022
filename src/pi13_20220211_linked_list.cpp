@@ -130,11 +130,10 @@ void remove_item_at_position(ListNode*& list_head, std::size_t position) {
 // function written by Mykola Vlasenko
 void remove_entire_list(ListNode*& list_head) {
 	ListNode* current = list_head;
-	ListNode* next_current;
 	while(current != nullptr) {
-		next_current = current->next;
-		delete current;
-		current = next_current;
+		ListNode* to_delete = current;
+		current = current->next;
+		delete to_delete;
 	}
 	list_head = nullptr;
 	return;
