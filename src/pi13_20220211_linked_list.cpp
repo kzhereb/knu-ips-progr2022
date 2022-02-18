@@ -72,6 +72,50 @@ void add_item_after_position(ListNode*& list_head, int data, std::size_t positio
 
 }
 
+// remove item from list after position (might be a bit buggy though)
+// function written by Mykola Vlasenko
+void remove_item_at_position(ListNode*& list_head, int position) {
+	if (list_head == nullptr) {
+		return;
+	}
+	ListNode* current = list_head;
+	int current_position = 1;
+	//if position is higher than the number of nodes - do nothing?
+	while((current->next != nullptr) && (current_position < position)) {
+		current = current->next;
+		current_position++;
+	}
+
+	if (current == list_head) {
+		list_head = current->next;
+		list_head->prev = nullptr;
+		return;
+	} else {
+
+    ListNode* prev_node = current->prev;
+
+    if (current->next == nullptr) { // remove from end
+
+    	current = nullptr;
+        prev_node->next = nullptr;
+
+	} else { // remove in the middle
+
+        ListNode* next_node = current->next;
+
+        current->prev = nullptr;
+        current->next = nullptr;
+
+        prev_node->next = next_node;
+        next_node->prev = prev_node;
+
+	}
+
+
+	}
+	//	return list_head;
+}
+
 
 // print list
 void print_list(ListNode* list_head) {
@@ -96,7 +140,7 @@ void print_reverse(ListNode* list_head) {
 	std::cout<<std::endl;
 }
 
-// remove item from list
+
 // remove entire list
 
 
@@ -193,6 +237,18 @@ int main() {
 	print_reverse(list_head);
 
 	add_item_after_position(list_head, 3, 5);
+	print_list(list_head);
+	print_reverse(list_head);
+
+	remove_item_at_position(list_head, 1);
+	print_list(list_head);
+	print_reverse(list_head);
+
+	remove_item_at_position(list_head, 5);
+	print_list(list_head);
+	print_reverse(list_head);
+
+	remove_item_at_position(list_head, 1);
 	print_list(list_head);
 	print_reverse(list_head);
 
