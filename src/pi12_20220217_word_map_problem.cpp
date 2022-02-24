@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cassert>
 
 namespace pi12_20220217_word_map_problem {
 
@@ -25,6 +26,7 @@ struct ListNode {
 };
 
 void add_to_list(ListNode* head, WordTranslation data) {
+	assert(head!=nullptr);
 	ListNode* current = head;
 	while (true) {
 		if (current->data.frequency <= data.frequency) {
