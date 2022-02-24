@@ -25,9 +25,8 @@ struct ListNode {
 };
 
 void add_to_list(ListNode* head, WordTranslation data) {
-
 	ListNode* current = head;
-	while(current->next) {
+	while (true) {
 		if (current->data.frequency <= data.frequency) {
 			ListNode* new_node = new ListNode;
 			new_node->data = current->data;
@@ -36,14 +35,14 @@ void add_to_list(ListNode* head, WordTranslation data) {
 			current->next = new_node;
 			return;
 		}
+		if (current->next == nullptr)
+			break;
 		current = current->next;
 	}
 	ListNode* new_node = new ListNode;
 	new_node->data = data;
 	new_node->next = nullptr;
 	current->next = new_node;
-
-
 }
 
 struct WordMap {
