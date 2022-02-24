@@ -64,6 +64,28 @@ struct WordMap {
 		list_heads.push_back(new_node);
 	}
 
+	std::string translate_single_word(std::string word) {
+		assert(word.length()>0);
+		char key = word[0];
+		for(ListNode* head: list_heads) {
+			if (head->data.key() == key) {
+				ListNode* current = head;
+				while (current) {
+					if (current->data.in_word == word) {
+						return current->data.out_word;
+					}
+					current = current->next;
+				}
+				return word; // no translation found for this key
+			}
+		}
+		return word; // no key found
+	}
+
+//	std::string translate_text(std::string input) {
+//
+//	}
+
 	void print() {
 		for(ListNode* head: list_heads) {
 			ListNode* current = head;
@@ -95,6 +117,10 @@ int main() {
 		map.add_translation(input_array[i]);
 	}
 	map.print();
+	std::cout<<map.translate_single_word("c")<<" ";
+	std::cout<<map.translate_single_word("d")<<" ";
+	std::cout<<map.translate_single_word("e")<<" ";
+	std::cout<<std::endl;
 
 	return 0;
 }
