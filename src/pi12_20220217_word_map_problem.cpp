@@ -91,7 +91,8 @@ struct WordMap {
 	std::string translate_text(std::string input) {
 		std::string result;
 		std::string current_word;
-		for(std::size_t i = 0; i<input.length()+1; i++) { // for i == length(), must return null char
+		std::size_t input_length = input.length();
+		for(std::size_t i = 0; i<=input_length; i++) { // for i == length(), must return null char
 			char current = input[i];
 			if (is_word_char(current)) { current_word += current;}
 			else { // space, punctuation, some unknown char
