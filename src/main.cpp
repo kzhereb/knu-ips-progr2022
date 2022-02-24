@@ -5,7 +5,7 @@
  *      Author: KZ
  */
 
-#define current_namespace pi12_20220217_word_map_problem
+#define current_namespace pi12_20220224_sort_file
 
 namespace current_namespace {
 	int main();
