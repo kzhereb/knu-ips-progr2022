@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <cassert>
+#include <cctype>
 
 namespace pi12_20220217_word_map_problem {
 
@@ -82,9 +83,30 @@ struct WordMap {
 		return word; // no key found
 	}
 
-//	std::string translate_text(std::string input) {
-//
-//	}
+	bool is_word_char(char ch) {
+		// see https://en.cppreference.com/w/cpp/string/byte/isalnum
+		return std::isalnum(static_cast<unsigned char>(ch));
+	}
+
+	std::string translate_text(std::string input) {
+		std::string result;
+		std::string current_word;
+		for(std::size_t i = 0; i<input.length(); i++) {
+			char current = input[i];
+			if (is_word_char(current)) { current_word += current;}
+			else { // space, punctuation, some unknown char
+				if (current_word.length() > 0) {
+					std::string translated_word = translate_single_word(current_word);
+					result += translated_word;
+				}
+				result += current;
+				current_word = "";
+			}
+		}
+
+		return result;
+
+	}
 
 	void print() {
 		for(ListNode* head: list_heads) {
@@ -121,6 +143,8 @@ int main() {
 	std::cout<<map.translate_single_word("d")<<" ";
 	std::cout<<map.translate_single_word("e")<<" ";
 	std::cout<<std::endl;
+
+	std::cout<<map.translate_text("abc aaa!! c xyz XYZ ok? ")<<std::endl;
 
 	return 0;
 }
