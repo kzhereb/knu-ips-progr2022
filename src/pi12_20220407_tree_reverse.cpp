@@ -6,7 +6,7 @@
  */
 
 #include <iostream>
-
+#include <vector>
 
 namespace pi12_20220407_tree_reverse {
 
@@ -66,6 +66,16 @@ struct TreeNode { // ternary tree - max 3 child nodes
 		child_nodes[2] = right_child;
 	}
 
+	void add_child(TreeNode* child) {
+		for(std::size_t i = 0; i<3; i++) {
+			if (! child_nodes[i]) {
+				child_nodes[i] = child;
+				return;
+			}
+		}
+		throw std::logic_error("Max number of children exceeded");
+	}
+
 	void print() {
 		std::cout<<data;
 		if (! child_nodes[0]) { return; }
@@ -89,6 +99,62 @@ TreeNode* example_tree() { //1(2, 3(5, 6), 4(7)) - example from lecture slides
 	return root;
 }
 
+struct TreeNodePair {
+	TreeNodeReversed* reversed;
+	TreeNode* node;
+	TreeNodePair(TreeNodeReversed* reversed, TreeNode* node):reversed(reversed), node(node) {}
+};
+
+TreeNode* find_pair(std::vector<TreeNodePair>& pairs_found, TreeNodeReversed* reversed) {
+	for(auto& pair: pairs_found) {
+		if (pair.reversed == reversed) { return pair.node;}
+	}
+	return nullptr; //not found
+}
+
+void node_from_reversed(TreeNodeReversed* current, std::vector<TreeNodePair>& pairs_found, TreeNode*& root) {
+	if (current) {
+		std::cout<<current->data<<" ";
+		TreeNode* node = find_pair(pairs_found, current);
+		if (!node) {
+			std::cout<<"create_pair ";
+			node = new TreeNode(current->data);
+			pairs_found.emplace_back(current, node);
+			TreeNodeReversed* reversed_parent = current->parent;
+			if (!reversed_parent) {
+				std::cout << "root_found";
+				if (!root) {
+					root = node;
+				}
+				return;
+			}
+			TreeNode* parent = find_pair(pairs_found, reversed_parent);
+			if (!parent) {
+				std::cout<<"no_parent ";
+				node_from_reversed(reversed_parent, pairs_found, root);
+				parent = find_pair(pairs_found, reversed_parent);
+			}
+			if (parent) {
+				parent->add_child(node);
+			} else { std::cout<<"still_no_parent";}
+
+		}
+		std::cout<<std::endl;
+	}
+}
+
+TreeNode* from_reversed(const TreeReversed& reversed) {
+	std::vector<TreeNodePair> pairs_found;
+	TreeNode* root = nullptr;
+	for(std::size_t i = 0; i< reversed.size; i++) {
+		TreeNodeReversed* current = reversed.leaf_nodes[i];
+		node_from_reversed(current, pairs_found, root);
+		//TreeNodeReversed* parent = current->parent;
+	}
+	return root;
+
+}
+
 
 int main() {
 
@@ -97,6 +163,10 @@ int main() {
 
 	TreeNode* example = example_tree();
 	example->print();
+	std::cout<<std::endl;
+
+	TreeNode* output = from_reversed(input_tree);
+	output->print();
 	std::cout<<std::endl;
 
 	return 0;
