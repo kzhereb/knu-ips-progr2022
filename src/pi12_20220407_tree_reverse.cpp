@@ -55,11 +55,49 @@ struct TreeReversed {
 	}
 };
 
+struct TreeNode { // ternary tree - max 3 child nodes
+	int data;
+	TreeNode* child_nodes[3];
+	TreeNode(int data, TreeNode *left_child = nullptr,
+			TreeNode *mid_child = nullptr, TreeNode *right_child = nullptr) {
+		this->data = data;
+		child_nodes[0] = left_child;
+		child_nodes[1] = mid_child;
+		child_nodes[2] = right_child;
+	}
+
+	void print() {
+		std::cout<<data;
+		if (! child_nodes[0]) { return; }
+		std::cout<<"(";
+		for(std::size_t i = 0; i<3; i++) {
+			if (!child_nodes[i]) {break;}
+			child_nodes[i]->print();
+			std::cout<<" ";
+		}
+		std::cout<<")";
+
+	}
+
+};
+
+TreeNode* example_tree() { //1(2, 3(5, 6), 4(7)) - example from lecture slides
+	TreeNode* root = new TreeNode(1,
+			new TreeNode(2),
+			new TreeNode(3, new TreeNode(5), new TreeNode(6)),
+			new TreeNode(4, new TreeNode(7)));
+	return root;
+}
+
 
 int main() {
 
 	TreeReversed input_tree;
 	input_tree.print_leaves_paths();
+
+	TreeNode* example = example_tree();
+	example->print();
+	std::cout<<std::endl;
 
 	return 0;
 }
