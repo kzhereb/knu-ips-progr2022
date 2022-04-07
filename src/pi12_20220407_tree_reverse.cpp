@@ -39,13 +39,27 @@ struct TreeReversed {
 
 	}
 
-	void print_leaves_path() {
+	void print_leaves_paths() {
 		// example output: 1 2; 1 3 5; 1 3 6; 1 4 7
+		for (std::size_t i = 0; i < size; i++) {
+			print_node(leaf_nodes[i]);
+			std::cout << std::endl;
+		}
+	}
+
+	void print_node(TreeNodeReversed *current) {
+		if (current) {
+			print_node(current->parent);
+			std::cout << current->data << " ";
+		}
 	}
 };
 
 
 int main() {
+
+	TreeReversed input_tree;
+	input_tree.print_leaves_paths();
 
 	return 0;
 }
