@@ -1,0 +1,69 @@
+/*
+ * pi13_20220408_component_tree.cpp
+ *
+ *  Created on: Apr 8, 2022
+ *      Author: KZ
+ */
+
+#include <string>
+#include <vector>
+#include <iostream>
+
+
+namespace pi13_20220408_component_tree {
+
+enum ComponentType {Basic=1, // no subcomponents, basic functionality
+	Container, // contains subcomponents
+	Advanced,  // may contain subcomponents, adds extra functionality
+	Control    // controls its subcomponents
+};
+
+struct ComponentNode {
+	std::string name;
+	ComponentType type;
+	int cost;
+	int profit_per_time;
+	std::vector<ComponentNode*> subcomponents;
+
+	ComponentNode(std::string name, ComponentType type, int cost, int profit_per_time) {
+		this->name = name;
+		this->type = type;
+		this->cost = cost;
+		this->profit_per_time = profit_per_time;
+	}
+
+	void add_subcomponent(ComponentNode* subcomponent) {
+		subcomponents.push_back(subcomponent);
+	}
+
+	void print() {
+		std::cout<<"{Name="<<name<<",type="<<type<<",cost="<<cost<<",profit="<<profit_per_time;
+		std::cout<<",children=(";
+		for(std::size_t i=0; i<subcomponents.size(); i++) {
+			subcomponents[i]->print();
+		}
+		std::cout<<")} ";
+	}
+};
+
+
+int main() {
+	ComponentNode* system = new ComponentNode("entire system",Control,100, 0);
+	ComponentNode* profit_center = new ComponentNode("profit generator", Basic, 30, 10);
+	ComponentNode* producers = new ComponentNode("producers", Container, 40, 0);
+	ComponentNode* basic_producer = new ComponentNode("basic producer", Basic, 10, 1);
+	ComponentNode* advanced_producer = new ComponentNode("advanced producer", Advanced, 25, 5);
+
+	producers->add_subcomponent(basic_producer);
+	producers->add_subcomponent(advanced_producer);
+	system->add_subcomponent(producers);
+	system->add_subcomponent(profit_center);
+
+	system->print();
+	std::cout<<std::endl;
+
+
+	return 0;
+}
+}
+
