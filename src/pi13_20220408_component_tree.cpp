@@ -36,6 +36,19 @@ struct ComponentNode {
 		subcomponents.push_back(subcomponent);
 	}
 
+	bool remove_subcomponent(ComponentNode* subcomponent) { //removes from tree, but does not delete
+		for(std::size_t i=0; i<subcomponents.size(); i++) {
+			if (subcomponents[i] == subcomponent) {
+				subcomponents.erase(subcomponents.begin()+i);
+				return true;
+			}
+			if (subcomponents[i]->remove_subcomponent(subcomponent)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	void print(int indent_level=0) {
 		for(int i=0; i<indent_level; i++) {std::cout<<"  ";}
 		std::cout<<"{Name="<<name<<",type="<<type<<",cost="<<cost<<",profit="<<profit_per_time;
@@ -68,6 +81,20 @@ int main() {
 
 	system->print();
 	std::cout<<std::endl;
+
+	system->remove_subcomponent(basic_producer);
+
+	system->print();
+	std::cout<<std::endl;
+
+	if (system->remove_subcomponent(basic_producer)) {
+		std::cout<<"error! removed twice"<<std::endl;
+	} else {
+		std::cout<<"trying to remove subcomponent that is not in tree, nothing happens"<<std::endl;
+	}
+	system->print();
+	std::cout<<std::endl;
+
 
 
 	return 0;
