@@ -66,6 +66,14 @@ struct ComponentNode {
 		return result;
 	}
 
+	int total_cost() {
+		int result = this->cost;
+		for(std::size_t i = 0; i<subcomponents.size(); i++) {
+			result += subcomponents[i]->total_cost();
+		}
+		return result;
+	}
+
 	void print(int indent_level=0) {
 		for(int i=0; i<indent_level; i++) {std::cout<<"  ";}
 		std::cout<<"{Name="<<name<<",type="<<type<<",cost="<<cost<<",profit="<<profit_per_time;
@@ -105,6 +113,8 @@ int main() {
 		result->print();
 		std::cout<<std::endl;
 	}
+
+	std::cout<<"Total cost of system: "<<system->total_cost()<<std::endl;
 
 	std::cout<<"removing items"<<std::endl;
 	system->remove_subcomponent(basic_producer);
