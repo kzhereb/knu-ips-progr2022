@@ -60,10 +60,11 @@ struct ComponentNode {
 		}
 		return result;
 	}
-
+	// search by part of name
+	// e.g. if name is "basic producer", then it should be searchable by "producer", or "basic", or "basic producer" etc.
 	std::vector<ComponentNode*> find_by_name_part(std::string name) {
 		std::vector<ComponentNode*> result;
-		return result;
+		return result; // TODO: implement me
 	}
 
 	int total_cost() {
@@ -72,6 +73,12 @@ struct ComponentNode {
 			result += subcomponents[i]->total_cost();
 		}
 		return result;
+	}
+
+	// returns number of time units before profits from this component exceed its cost
+	// e.g. if total cost is 100 and total profit per time unit is 10, then it takes 10 time units
+	int time_to_profitability() {
+		return -1; //TODO: implement me
 	}
 
 	void print(int indent_level=0) {
