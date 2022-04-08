@@ -36,13 +36,20 @@ struct ComponentNode {
 		subcomponents.push_back(subcomponent);
 	}
 
-	void print() {
+	void print(int indent_level=0) {
+		for(int i=0; i<indent_level; i++) {std::cout<<"  ";}
 		std::cout<<"{Name="<<name<<",type="<<type<<",cost="<<cost<<",profit="<<profit_per_time;
-		std::cout<<",children=(";
-		for(std::size_t i=0; i<subcomponents.size(); i++) {
-			subcomponents[i]->print();
+		if (subcomponents.size() == 0) {
+			std::cout<<", no children}";
+			return;
 		}
-		std::cout<<")} ";
+		std::cout<<",children:"<<std::endl;
+		for(std::size_t i=0; i<subcomponents.size(); i++) {
+			subcomponents[i]->print(indent_level+1);
+			std::cout<<std::endl;
+		}
+		for(int i=0; i<indent_level; i++) {std::cout<<"  ";}
+		std::cout<<"} ";
 	}
 };
 
