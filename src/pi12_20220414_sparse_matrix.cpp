@@ -69,13 +69,9 @@ struct SparseMatrix {
 		for(std::size_t i = 0; i < num_rows; i++) {
 			MatrixNode* current = rows[i];
 			for (std::size_t j = 0; j < num_cols; j++) {
-				if (current) {
-					if (current->column_index == j) {
-						std::cout<<current->data<<" ";
-						current = current->next;
-					} else {
-						std::cout<<"0 ";
-					}
+				if (current && current->column_index == j) {
+					std::cout<<current->data<<" ";
+					current = current->next;
 				} else {
 					std::cout<<"0 ";
 				}
