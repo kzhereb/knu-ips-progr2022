@@ -112,35 +112,26 @@ TreeNode* find_pair(std::vector<TreeNodePair>& pairs_found, TreeNodeReversed* re
 	return nullptr; //not found
 }
 
-void node_from_reversed(TreeNodeReversed* current, std::vector<TreeNodePair>& pairs_found, TreeNode*& root) {
+//Code by Mykhailo Tyshchenko
+
+TreeNode* node_from_reversed(TreeNodeReversed* current, std::vector<TreeNodePair>& pairs_found, TreeNode*& root) {
 	if (current) {
-		std::cout<<current->data<<" ";
 		TreeNode* node = find_pair(pairs_found, current);
 		if (!node) {
-			std::cout<<"create_pair ";
 			node = new TreeNode(current->data);
-			pairs_found.emplace_back(current, node);
-			TreeNodeReversed* reversed_parent = current->parent;
-			if (!reversed_parent) {
-				std::cout << "root_found";
-				if (!root) {
-					root = node;
-				}
-				return;
-			}
-			TreeNode* parent = find_pair(pairs_found, reversed_parent);
-			if (!parent) {
-				std::cout<<"no_parent ";
-				node_from_reversed(reversed_parent, pairs_found, root);
-				parent = find_pair(pairs_found, reversed_parent);
-			}
+			TreeNode* parent = node_from_reversed(current->parent, pairs_found, root);
+			pairs_found.emplace_back(TreeNodePair(current, node));
 			if (parent) {
 				parent->add_child(node);
-			} else { std::cout<<"still_no_parent";}
+			}
+			else {
+				root = node;
+			}
 
 		}
-		std::cout<<std::endl;
+		return node;
 	}
+	return nullptr;
 }
 
 TreeNode* from_reversed(const TreeReversed& reversed) {
