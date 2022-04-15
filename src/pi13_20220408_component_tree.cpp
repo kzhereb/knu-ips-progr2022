@@ -64,7 +64,7 @@ struct ComponentNode {
 	// e.g. if name is "basic producer", then it should be searchable by "producer", or "basic", or "basic producer" etc.
 	std::vector<ComponentNode*> find_by_name_part(std::string name) {
 	  std::vector<ComponentNode*> result;
-	  if ((this->name).find(name) != -1) {
+	  if ((this->name).find(name) != std::string::npos) {
 	    result.push_back(this);
 	  }
 	  for (std::size_t i = 0; i < subcomponents.size(); i++) {
