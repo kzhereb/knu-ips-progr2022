@@ -63,8 +63,15 @@ struct ComponentNode {
 	// search by part of name
 	// e.g. if name is "basic producer", then it should be searchable by "producer", or "basic", or "basic producer" etc.
 	std::vector<ComponentNode*> find_by_name_part(std::string name) {
-		std::vector<ComponentNode*> result;
-		return result; // TODO: implement me
+	  std::vector<ComponentNode*> result;
+	  if ((this->name).find(name) != -1) {
+	    result.push_back(this);
+	  }
+	  for (std::size_t i = 0; i < subcomponents.size(); i++) {
+	    std::vector<ComponentNode*> child_result = subcomponents[i]->find_by_name_part(name);
+	    result.insert(result.end(), child_result.begin(), child_result.end());
+	  }
+	  return result;
 	}
 
 	int total_cost() {
@@ -115,6 +122,14 @@ int main() {
 	std::cout<<std::endl;
 
 	std::vector<ComponentNode*> found = system->find_by_type(Basic);
+	std::cout<<"found "<< found.size() << " components"<<std::endl;
+	for(ComponentNode* result : found) {
+		result->print();
+		std::cout<<std::endl;
+	}
+
+	std::cout<<"search for producer"<<std::endl;
+	found = system->find_by_name_part("producer");
 	std::cout<<"found "<< found.size() << " components"<<std::endl;
 	for(ComponentNode* result : found) {
 		result->print();
