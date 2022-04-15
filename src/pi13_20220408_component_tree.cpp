@@ -94,6 +94,13 @@ struct ComponentNode {
 	// e.g. if total cost is 100 and total profit per time unit is 10, then it takes 10 time units
 	int time_to_profitability() {
 	  int cost = total_cost(), profit = total_profit_per_time();
+	  if (profit == 0) {
+		  if (cost == 0) { // no cost and no profit = return 0
+			  return 0;
+		  } else {
+			  throw std::invalid_argument("zero profit and non-zero costs - infinite time to profitability");
+		  }
+	  }
 	  int time_units = cost / profit;
 	  if (cost % profit > 0)
 	    time_units++;
@@ -152,6 +159,16 @@ int main() {
 	std::cout<<"Total cost of system: "<<system->total_cost()<<std::endl;
 	std::cout<<"Total profit per time unit of system: "<<system->total_profit_per_time()<<std::endl;
 	std::cout<<"Time until system is profitable: "<<system->time_to_profitability()<<std::endl;
+
+	ComponentNode* zero_cost_profit = new ComponentNode("ZeroZero",Basic,0,0);
+	std::cout<<"Time until component is profitable: "<<zero_cost_profit->time_to_profitability()<<std::endl;
+
+	try {
+		ComponentNode* zero_profit_nonzero_cost = new ComponentNode("ZeroNonZero",Basic,1,0);
+		std::cout<<"Time until component is profitable: "<<zero_profit_nonzero_cost->time_to_profitability()<<std::endl;
+	} catch(std::invalid_argument& ex) {
+		std::cerr<<ex.what()<<std::endl;
+	}
 
 	std::cout<<"removing items"<<std::endl;
 	system->remove_subcomponent(basic_producer);
