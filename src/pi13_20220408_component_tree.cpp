@@ -9,6 +9,8 @@
 #include <vector>
 #include <iostream>
 
+#include <cassert>
+
 
 namespace pi13_20220408_component_tree {
 
@@ -26,6 +28,9 @@ struct ComponentNode {
 	std::vector<ComponentNode*> subcomponents;
 
 	ComponentNode(std::string name, ComponentType type, int cost, int profit_per_time) {
+		assert(cost>=0);
+		assert(profit_per_time>=0);
+
 		this->name = name;
 		this->type = type;
 		this->cost = cost;
@@ -183,6 +188,9 @@ int main() {
 	}
 	system->print();
 	std::cout<<std::endl;
+
+	//will cause assertion failed and program termination
+	//ComponentNode* should_not_work = new ComponentNode("NegativeCost", Basic, -1, 1);
 
 
 
