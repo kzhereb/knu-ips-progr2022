@@ -82,11 +82,24 @@ struct ComponentNode {
 		return result;
 	}
 
+	int total_profit_per_time() {
+	  int profit = this->profit_per_time;
+	  for (std::size_t i = 0; i < subcomponents.size(); i++) {
+	    profit += subcomponents[i]->total_profit_per_time();
+	  }
+	  return profit;
+	}
+
 	// returns number of time units before profits from this component exceed its cost
 	// e.g. if total cost is 100 and total profit per time unit is 10, then it takes 10 time units
 	int time_to_profitability() {
-		return -1; //TODO: implement me
+	  int cost = total_cost(), profit = total_profit_per_time();
+	  int time_units = cost / profit;
+	  if (cost % profit > 0)
+	    time_units++;
+	  return time_units;
 	}
+
 
 	void print(int indent_level=0) {
 		for(int i=0; i<indent_level; i++) {std::cout<<"  ";}
@@ -137,6 +150,8 @@ int main() {
 	}
 
 	std::cout<<"Total cost of system: "<<system->total_cost()<<std::endl;
+	std::cout<<"Total profit per time unit of system: "<<system->total_profit_per_time()<<std::endl;
+	std::cout<<"Time until system is profitable: "<<system->time_to_profitability()<<std::endl;
 
 	std::cout<<"removing items"<<std::endl;
 	system->remove_subcomponent(basic_producer);
