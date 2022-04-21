@@ -43,7 +43,36 @@ struct BitVector {
 	}
 };
 
+struct Graph {
+	BitVector edges[32];
+	std::size_t size;
 
+	Graph (std::size_t size) {
+		assert(size<=32);
+
+		this->size = size;
+	}
+
+	void add_edge(std::size_t from, std::size_t to) {
+		assert(from < size);
+		assert(to < size);
+
+		edges[from].set(to);
+	}
+
+	void print() {
+		for(std::size_t i = 0; i<size; i++) {
+			for (std::size_t j = 0; j<size; j++) {
+				if (edges[i].get(j)) {
+					std::cout<<i<<"->"<<j<<" ";
+				}
+			}
+			std::cout<<std::endl;
+		}
+	}
+
+
+};
 
 
 
@@ -58,6 +87,14 @@ int main() {
 
 	vec.set(2, false);
 	vec.print(3);
+
+	Graph graph(4);
+	graph.add_edge(0, 1);
+	graph.add_edge(2, 3);
+	graph.add_edge(1, 3);
+
+	graph.print();
+
 
 	return 0;
 }
