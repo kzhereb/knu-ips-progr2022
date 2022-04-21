@@ -41,6 +41,14 @@ struct BitVector {
 		}
 		std::cout<<std::endl;
 	}
+
+	bool is_full(std::size_t size = 32) {
+		assert(size<32);
+
+		unsigned mask = ~(~0 << size);
+
+		return (bits & mask) == mask;
+	}
 };
 
 struct Graph {
@@ -71,6 +79,28 @@ struct Graph {
 		}
 	}
 
+	void visit_recursive(BitVector& visited, std::size_t vertex) {
+		if (visited.get(vertex)) {
+			return;
+		}
+		visited.set(vertex);
+		for(std::size_t i = 0; i< size; i++) {
+			if (edges[vertex].get(i)) {
+				visit_recursive(visited, i);
+			}
+		}
+	}
+
+	bool is_accessible_from(std::size_t vertex) {
+		BitVector visited;
+
+		visit_recursive(visited, vertex);
+
+		return visited.is_full(size);
+
+	}
+
+
 
 };
 
@@ -84,9 +114,16 @@ int main() {
 
 	vec.print();
 	vec.print(3);
+	std::cout<<"full(1)="<<vec.is_full(1)<<", full(3)="<<vec.is_full(3)<<std::endl;
 
 	vec.set(2, false);
 	vec.print(3);
+	std::cout<<"full(1)="<<vec.is_full(1)<<", full(3)="<<vec.is_full(3)<<std::endl;
+
+	vec.set(1);
+	vec.set(2);
+	vec.print(3);
+	std::cout<<"full(1)="<<vec.is_full(1)<<", full(3)="<<vec.is_full(3)<<std::endl;
 
 	Graph graph(4);
 	graph.add_edge(0, 1);
