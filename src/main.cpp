@@ -5,7 +5,7 @@
  *      Author: KZ
  */
 
-#define current_namespace pi12_20220421_graph
+#define current_namespace pi12_20220428_binarysearchtree
 
 namespace current_namespace {
 	int main();
