@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <cassert>
 
 namespace pi12_20220428_binarysearchtree {
 
@@ -57,6 +58,21 @@ struct BinarySearchTree {
 		return current;
 	}
 
+	TreeNode* search(int data) { //return nullptr if not found
+		return search_recursive(data, root);
+
+	}
+
+	TreeNode* search_recursive(int data, TreeNode* current) {
+		if (!current) {return nullptr;}
+		if (current->data == data) {return current;}
+		if (current->data < data) {return search_recursive(data, current->right);}
+		if (current->data > data) {return search_recursive(data, current->left);}
+		assert(false); //should not reach this
+		return nullptr;
+	}
+
+
 	void print_as_tree() {
 		if(!root) {
 			std::cout<<"empty tree"<<std::endl;
@@ -75,6 +91,14 @@ int main() {
 	bst.add(7);
 
 	bst.print_as_tree();
+
+	if (bst.search(7)) { std::cout<<"7 found"<<std::endl;}
+	else { std::cout<<"7 not found"<<std::endl;}
+
+	if (bst.search(3)) { std::cout<<"3 found"<<std::endl;}
+	else { std::cout<<"3 not found"<<std::endl;}
+
+
 	return 0;
 }
 }
