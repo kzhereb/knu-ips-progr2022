@@ -20,6 +20,15 @@ struct TreeNode {
 		this->right = right;
 	}
 
+	TreeNode* find_max_subtree() {
+		if (this->right) {
+			return this->right->find_max_subtree();
+		} else {
+			return this;
+		}
+
+	}
+
 
 
 };
@@ -70,6 +79,8 @@ int main() {
 	tree.add(11);
 
 	tree.print_as_tree();
+
+	std::cout<<"Max data is "<<tree.root->find_max_subtree()->data<<std::endl;
 
 
 	return 0;
