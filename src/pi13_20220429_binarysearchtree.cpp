@@ -30,6 +30,16 @@ TreeNode*& find_max_subtree(TreeNode*& root) {
 		return root;
 	}
 }
+
+TreeNode*& find_min_subtree(TreeNode*& root) {
+	if (root->left) {
+		return find_min_subtree(root->left);
+	} else {
+		return root;
+	}
+}
+
+
 // returns reference to found node, or reference to null node if not found
 // null node should not be changed!
 TreeNode*& search(TreeNode*& root, int data) {
@@ -93,6 +103,8 @@ void print_as_tree_recursive(TreeNode* node, int indent_level = 0) {
 
 }
 
+
+
 struct SearchTree {
 	TreeNode* root;
 
@@ -125,6 +137,7 @@ int main() {
 	tree.print_as_tree();
 
 	std::cout<<"Max data is "<<find_max_subtree(tree.root)->data<<std::endl;
+	std::cout<<"Min data is "<<find_min_subtree(tree.root)->data<<std::endl;
 
 	tree.add(1);
 	tree.print_as_tree();
