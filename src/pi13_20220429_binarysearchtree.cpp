@@ -115,6 +115,13 @@ void print_in_order_removing_recursive(TreeNode* root) {
 	remove(root, min);
 	print_in_order_removing_recursive(root);
 }
+// code by Anastasiia Rudenko
+void sym_print(TreeNode* root) {
+    if (!root) { return; }
+    sym_print(root->left);
+    std::cout << root->data << " ";
+    sym_print(root->right);
+}
 
 
 
@@ -143,9 +150,15 @@ struct SearchTree {
 		print_in_order_removing_recursive(copy(root));
 	}
 
+	void print_in_order_symmetric() {
+		sym_print(root);
+		std::cout << std::endl;
+	}
+
 	void print_all() {
 		print_as_tree();
 		print_in_order_removing();
+		print_in_order_symmetric();
 	}
 
 };
