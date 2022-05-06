@@ -108,8 +108,12 @@ void print_as_tree_recursive(TreeNode* node, int indent_level = 0) {
 
 }
 
-void print_in_order_removing(TreeNode* root) {
-
+void print_in_order_removing_recursive(TreeNode* root) {
+	if (!root) {std::cout<<std::endl; return;}
+	int min = find_min_subtree(root)->data;
+	std::cout<<min<<" ";
+	remove(root, min);
+	print_in_order_removing_recursive(root);
 }
 
 
@@ -135,6 +139,15 @@ struct SearchTree {
 		print_as_tree_recursive(root);
 	}
 
+	void print_in_order_removing() {
+		print_in_order_removing_recursive(copy(root));
+	}
+
+	void print_all() {
+		print_as_tree();
+		print_in_order_removing();
+	}
+
 };
 
 
@@ -147,24 +160,25 @@ int main() {
 	tree.add(5);
 	tree.add(11);
 
-	tree.print_as_tree();
+	tree.print_all();
 
 	std::cout<<"Max data is "<<find_max_subtree(tree.root)->data<<std::endl;
 	std::cout<<"Min data is "<<find_min_subtree(tree.root)->data<<std::endl;
 
 	tree.add(1);
-	tree.print_as_tree();
+	tree.print_all();
+
 	std::cout<<"remove 2"<<std::endl;
 	tree.remove(2);
-	tree.print_as_tree();
+	tree.print_all();
 
 	SearchTree copy = tree;
 	copy.add(123);
 	copy.remove(7);
 	std::cout<<"copy"<<std::endl;
-	copy.print_as_tree();
+	copy.print_all();
 	std::cout<<"original"<<std::endl;
-	tree.print_as_tree();
+	tree.print_all();
 
 
 
