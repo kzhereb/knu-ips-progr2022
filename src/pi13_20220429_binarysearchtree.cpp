@@ -39,6 +39,11 @@ TreeNode*& find_min_subtree(TreeNode*& root) {
 	}
 }
 
+TreeNode* copy(TreeNode* other) {
+	if (!other) { return nullptr;}
+	return new TreeNode(other->data, copy(other->left), copy(other->right));
+}
+
 
 // returns reference to found node, or reference to null node if not found
 // null node should not be changed!
@@ -103,12 +108,20 @@ void print_as_tree_recursive(TreeNode* node, int indent_level = 0) {
 
 }
 
+void print_in_order_removing(TreeNode* root) {
+
+}
+
 
 
 struct SearchTree {
 	TreeNode* root;
 
 	SearchTree() { root = nullptr;}
+
+	SearchTree(const SearchTree& other) {
+		root = copy(other.root);
+	}
 
 	void add(int data) {
 		add_recursive(root, data);
@@ -143,6 +156,14 @@ int main() {
 	tree.print_as_tree();
 	std::cout<<"remove 2"<<std::endl;
 	tree.remove(2);
+	tree.print_as_tree();
+
+	SearchTree copy = tree;
+	copy.add(123);
+	copy.remove(7);
+	std::cout<<"copy"<<std::endl;
+	copy.print_as_tree();
+	std::cout<<"original"<<std::endl;
 	tree.print_as_tree();
 
 
