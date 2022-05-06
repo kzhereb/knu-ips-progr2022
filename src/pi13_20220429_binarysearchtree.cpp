@@ -21,46 +21,6 @@ struct TreeNode {
 		this->right = right;
 	}
 
-//	TreeNode* find_max_subtree() {
-//		if (this->right) {
-//			return this->right->find_max_subtree();
-//		} else {
-//			return this;
-//		}
-//	}
-
-//	TreeNode*& search(int data) {
-//		if (data == this->data) { return this;}
-//		if (data < this->data) {
-//			if (left) { return left->search(data);}
-//			else {return nullptr; }
-//		}
-//		if (data > this->data) {
-//			if (right) { return right->search(data);}
-//			else {return nullptr; }
-//		}
-//	}
-
-//	bool remove(int data) {
-//		TreeNode*& to_delete = search(data);
-//		if (!to_delete) {return false;}
-//		if (to_delete->left) {
-//			if (to_delete->right) { // left and right
-//				TreeNode*& prev = to_delete->left->find_max_subtree();
-//				to_delete->data = prev->data;
-//				prev = prev->left;
-//			} else { // only left
-//				to_delete = to_delete->left;
-//			}
-//		} else {
-//			if (to_delete->right) { // right only
-//				to_delete = to_delete->right;
-//			} else { // no children
-//				to_delete = nullptr;
-//			}
-//		}
-//	}
-
 };
 
 TreeNode*& find_max_subtree(TreeNode*& root) {
