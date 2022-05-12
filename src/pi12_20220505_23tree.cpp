@@ -6,6 +6,10 @@
  */
 
 #include <iostream>
+#include <vector>
+//#include <iterator>
+#include <algorithm>
+#include <random>
 #include <cassert>
 
 namespace pi12_20220505_23tree {
@@ -236,6 +240,20 @@ struct B23Tree {
 
 };
 
+std::vector<int> get_random_shuffle() {
+    std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+
+    std::shuffle(v.begin(), v.end(), g);
+
+    return v;
+
+//    std::copy(v.begin(), v.end(), std::ostream_iterator<int>(std::cout, " "));
+//    std::cout << "\n";
+}
+
 
 int main(){
 	B23Tree tree;
@@ -254,6 +272,14 @@ int main(){
 	tree.print_all();
 	tree.add(7);
 	tree.print_all();
+
+	std::cout<<"random shuffle"<<std::endl;
+	B23Tree tree2;
+	std::vector<int> random_order = get_random_shuffle();
+	for(int item: random_order) {
+		tree2.add(item);
+		tree2.print_all();
+	}
 
 	return 0;
 }
