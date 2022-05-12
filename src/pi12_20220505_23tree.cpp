@@ -179,88 +179,23 @@ struct TreeNode {
 		std::cout<<")";
 	}
 
-//	bool add_and_split(int data, int child_index) {
-//		TreeNode* child = children[child_index];
-//		if (children[child_index]->add(data)) { return true;}
-//		else {
-//			if (this->size == 1) {
-//				if (data < child->data[0]) {
-//					add_single_data(child->data[0]);
-//					child->data[0] = data;
-//				} else if (data < child->data[1]) {
-//					add_single_data(data);
-//				} else { // data > child->data[1]
-//					add_single_data(child->data[1]);
-//					child->data[1] = data;
-//				}
-//				return true;
-//			} else { //size == 2
-//				if (data < child->data[0]) {
-//					TreeNode* new_children[2] = new TreeNode*[2];
-//					split(data, child->children[0], new_children);
-//					data3 = {data, child->data[0], child->data[1]};
-//					child4 = {new_children[0], new_children[1], child->children[1], child->children[2]};
-//					split(data3, child4);
-//
-//};
-//				}
-//			}
-//		}
-//	}
-//
-//	//returns true if added without need to rebalance
-//	bool add(int data) {
-//		if (size == 1) {
-//			if (children[0] == nullptr) {
-//				add_single_data(data);
-//				return true;
-//			} else {
-//				if (data < this->data[0]) {
-//					add_and_split(data, 0);
-//					return true;
-//				} else {
-//					assert(children[1]!=nullptr);
-//					add_and_split(data, 1);
-//					return true;
-//				}
-//			}
-//		} else { //size == 2
-//			if (children[0] == nullptr) {
-//				return false;
-//			} else {
-//				if (data < this->data[0]) {
-//					add_and_split(data,0);
-//				} else if (data < this->data[1]) {
-//					add_and_split(data,1);
-//				} else {
-//					add_and_split(data,2);
-//				}
-//			}
-//		}
-//		if (data < this->data[0]) {
-//			if (children[0]) {
-//				children[0]->add(data);
-//			} else {
-//				children[0] = new TreeNode(data, this);
-//			}
-//		} else if (size == 2) {
-//			if (data < this->data[1]) {
-//				if (children[1]) {
-//					children[1]->add(data);
-//				} else {
-//					children[1] = new TreeNode(data, this);
-//				}
-//			} else {
-//				if (children[2]) {
-//					children[2]->add(data);
-//				} else {
-//					children[2] = new TreeNode(data, this);
-//				}
-//			}
-//		} else {
-//			this->data[1] = data;
-//		}
-//	}
+	void print_in_order() {
+		if (children[0]) {
+			children[0]->print_in_order();
+		}
+		std::cout<<data[0]<<" ";
+		if (children[1]) {
+			children[1]->print_in_order();
+		}
+		if (size == 2) {
+			std::cout<<data[1]<<" ";
+			if (children[2]) {
+				children[2]->print_in_order();
+			}
+		}
+	}
+
+
 };
 
 struct B23Tree {
@@ -288,6 +223,17 @@ struct B23Tree {
 		std::cout<<std::endl;
 	}
 
+	void print_in_order() {
+		if(root) { root->print_in_order();}
+		else { std::cout<<"empty tree";}
+		std::cout<<std::endl;
+	}
+
+	void print_all() {
+		print_as_tree();
+		print_in_order();
+	}
+
 };
 
 
@@ -295,19 +241,19 @@ int main(){
 	B23Tree tree;
 
 	tree.add(1);
-	tree.print_as_tree();
+	tree.print_all();
 	tree.add(2);
-	tree.print_as_tree();
+	tree.print_all();
 	tree.add(3);
-	tree.print_as_tree();
+	tree.print_all();
 	tree.add(4);
-	tree.print_as_tree();
+	tree.print_all();
 	tree.add(5);
-	tree.print_as_tree();
+	tree.print_all();
 	tree.add(6);
-	tree.print_as_tree();
+	tree.print_all();
 	tree.add(7);
-	tree.print_as_tree();
+	tree.print_all();
 
 	return 0;
 }
