@@ -123,8 +123,6 @@ void sym_print(TreeNode* root) {
     sym_print(root->right);
 }
 
-
-
 struct SearchTree {
 	TreeNode* root;
 
