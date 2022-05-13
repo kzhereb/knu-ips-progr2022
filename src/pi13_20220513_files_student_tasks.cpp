@@ -138,6 +138,14 @@ void write_binary(std::ofstream& out, int value) {
 	out.write(reinterpret_cast<char*>(&value), sizeof value);
 }
 
+void write_binary(std::ofstream& out, float value) {
+	out.write(reinterpret_cast<char*>(&value), sizeof value);
+}
+
+void write_binary(std::ofstream& out, std::string value) {
+	out<<value<<'\0';
+}
+
 int read_binary_int(std::ifstream& infile) {
 	int value;
 	infile.read(reinterpret_cast<char*>(&value), sizeof value);
@@ -165,14 +173,20 @@ struct BinaryFileStorage {
 
 
 
-//		for(auto& task: in_memory.tasks) {
-//			outfile<<task.text;
-//			outfile<<task.author;
-//			outfile<<task.sent_time.year<<task.sent_time.month<<task.sent_time.day
-//					<<task.sent_time.hour<<task.sent_time.minute<<task.sent_time.second;
-//			outfile<<task.type;
-//			outfile<<task.evaluation_result;
-//		}
+		for(auto& task: in_memory.tasks) {
+			write_binary(outfile, task.text);
+			write_binary(outfile, task.author);
+
+			write_binary(outfile, task.sent_time.year);
+			write_binary(outfile, task.sent_time.month);
+			write_binary(outfile, task.sent_time.day);
+			write_binary(outfile, task.sent_time.hour);
+			write_binary(outfile, task.sent_time.minute);
+			write_binary(outfile, task.sent_time.second);
+
+			write_binary(outfile, task.type);
+			write_binary(outfile, task.evaluation_result);
+		}
 
 		outfile.flush();
 	}
