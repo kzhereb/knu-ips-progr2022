@@ -53,6 +53,24 @@ enum TaskType {
 	LinkToCloudStorage
 };
 
+void print_type(TaskType type) {
+	switch (type)
+	  {
+	  case 1:
+		std::cout << "MultipleChoice" << "  ";
+		break;
+	  case 2:
+		std::cout << "Code" << "  ";
+		break;
+	  case 3:
+		std::cout << "FreeFormText" << "  ";
+		break;
+	  case 4:
+		std::cout << "LinkToCloudStorage" << "  ";
+		break;
+	  }
+}
+
 struct StudentTask {
 	std::string text;
 	std::string author;
@@ -75,7 +93,9 @@ struct StudentTask {
 		std::cout<<"Sent time: ";		//sent_time<<"\n";
 		sent_time.print();
 		std::cout<<"\n";
-		std::cout<<"Type: "<<type<<"\n";
+		std::cout<<"Type: ";//<<type<<"\n";
+		print_type(type);
+		std::cout<<"\n";
 		std::cout<<"Evaluation result: "<<evaluation_result<<std::endl;
 	}
 };
