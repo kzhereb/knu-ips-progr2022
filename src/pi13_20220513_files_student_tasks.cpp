@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cassert>
 
 namespace pi13_20220513_files_student_tasks {
 
@@ -53,6 +54,22 @@ enum TaskType {
 	LinkToCloudStorage
 };
 
+std::string type_to_string(TaskType type) {
+	switch (type) {
+	case MultipleChoice:
+		return "MultipleChoice";
+	case Code:
+		return "Code";
+	case FreeFormText:
+		return "FreeFormText";
+	case LinkToCloudStorage:
+		return "LinkToCloudStorage";
+	default:
+		assert(false); //should be unreachable
+		return "Unknown";
+	}
+}
+
 void print_type(TaskType type) {
 	switch (type) {
 	case MultipleChoice:
@@ -69,6 +86,8 @@ void print_type(TaskType type) {
 		break;
 	}
 }
+
+
 
 struct StudentTask {
 	std::string text;
@@ -92,9 +111,7 @@ struct StudentTask {
 		std::cout<<"Sent time: ";		//sent_time<<"\n";
 		sent_time.print();
 		std::cout<<"\n";
-		std::cout<<"Type: ";//<<type<<"\n";
-		print_type(type);
-		std::cout<<"\n";
+		std::cout<<"Type: "<<type_to_string(type)<<"\n";
 		std::cout<<"Evaluation result: "<<evaluation_result<<std::endl;
 	}
 };
