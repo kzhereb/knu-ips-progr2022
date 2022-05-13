@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <cassert>
 
 namespace pi13_20220513_files_student_tasks {
@@ -133,6 +134,52 @@ struct MemoryStorage {
 	}
 };
 
+void write_binary(std::ofstream& out, int value) {
+	out.write(reinterpret_cast<char*>(&value), sizeof value);
+}
+
+int read_binary_int(std::ifstream& infile) {
+	int value;
+	infile.read(reinterpret_cast<char*>(&value), sizeof value);
+	return value;
+}
+
+struct BinaryFileStorage {
+	MemoryStorage in_memory;
+	std::string filename;
+
+	BinaryFileStorage(std::string filename) {
+		this->filename = filename;
+	}
+
+	void add(StudentTask task) {
+		in_memory.add(task);
+	}
+
+	void print() {
+		in_memory.print();
+	}
+
+	void save() {
+		std::ofstream outfile {filename, std::ios::binary};
+
+
+
+//		for(auto& task: in_memory.tasks) {
+//			outfile<<task.text;
+//			outfile<<task.author;
+//			outfile<<task.sent_time.year<<task.sent_time.month<<task.sent_time.day
+//					<<task.sent_time.hour<<task.sent_time.minute<<task.sent_time.second;
+//			outfile<<task.type;
+//			outfile<<task.evaluation_result;
+//		}
+
+		outfile.flush();
+	}
+
+
+};
+
 
 int main() {
 
@@ -144,6 +191,22 @@ int main() {
 
 
 	memory.print();
+
+	BinaryFileStorage binary{"tasks.bin"};
+	binary.add(task1);
+	binary.add({"1: a, 2:c, 3:d", "Ivan Petrenko", {2020, 5, 13, 12, 0, 0}, MultipleChoice, 2.1});
+
+	binary.print();
+	binary.save();
+	std::cout<<"binary file saved to "<<binary.filename<<std::endl;
+
+	std::ofstream outfile{"test.bin"};
+	write_binary(outfile, 1256);
+	outfile.flush();
+
+	std::ifstream infile{"test.bin"};
+	std::cout<<read_binary_int(infile);
+
 
 	return 0;
 }
