@@ -56,16 +56,16 @@ enum TaskType {
 void print_type(TaskType type) {
 	switch (type)
 	  {
-	  case 1:
+	  case MultipleChoice:
 		std::cout << "MultipleChoice" << "  ";
 		break;
-	  case 2:
+	  case Code:
 		std::cout << "Code" << "  ";
 		break;
-	  case 3:
+	  case FreeFormText:
 		std::cout << "FreeFormText" << "  ";
 		break;
-	  case 4:
+	  case LinkToCloudStorage:
 		std::cout << "LinkToCloudStorage" << "  ";
 		break;
 	  }
