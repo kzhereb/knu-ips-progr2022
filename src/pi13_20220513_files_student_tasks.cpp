@@ -54,21 +54,20 @@ enum TaskType {
 };
 
 void print_type(TaskType type) {
-	switch (type)
-	  {
-	  case MultipleChoice:
+	switch (type) {
+	case MultipleChoice:
 		std::cout << "MultipleChoice" << "  ";
 		break;
-	  case Code:
+	case Code:
 		std::cout << "Code" << "  ";
 		break;
-	  case FreeFormText:
+	case FreeFormText:
 		std::cout << "FreeFormText" << "  ";
 		break;
-	  case LinkToCloudStorage:
+	case LinkToCloudStorage:
 		std::cout << "LinkToCloudStorage" << "  ";
 		break;
-	  }
+	}
 }
 
 struct StudentTask {
