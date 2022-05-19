@@ -130,6 +130,28 @@ struct TreeNode {
 		}
 	}
 
+
+	TreeNode* find_max_subtree() {
+		if (children[2]) {
+			assert(size == 2);
+			return children[2]->find_max_subtree();
+		}
+		if (children[1]) {
+			assert(size == 1);
+			return children[1]->find_max_subtree();
+		}
+		assert(children[0] == nullptr);
+		return this; // no children
+	}
+
+	int get_max_data() {
+		if (size == 2) {
+			return data[1];
+		} else {
+			return data[0];
+		}
+	}
+
 	void print_as_tree() {
 		std::cout<<data[0];
 		if (size == 2) {
@@ -247,6 +269,14 @@ int main(){
 		tree2.add(item);
 		tree2.print_all();
 	}
+
+	TreeNode* max_node = tree2.root->find_max_subtree();
+	max_node->print_as_tree();
+	std::cout<<max_node->get_max_data()<<std::endl;
+	TreeNode* root_prev = tree2.root->children[0]->find_max_subtree();
+	root_prev->print_as_tree();
+	assert(root_prev->get_max_data() == tree2.root->data[0] - 1);
+
 
 	return 0;
 }
