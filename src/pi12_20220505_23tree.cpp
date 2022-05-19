@@ -151,6 +151,56 @@ struct TreeNode {
 			return data[0];
 		}
 	}
+	enum RemoveResult {Removed, NotFound, NeedParentRemove};
+
+	RemoveResult remove(int data_to_remove, TreeNode* parent){
+		if (children[0] == nullptr) {
+			if (size == 1) {
+				if (data[0] == data_to_remove) {
+					// rebalance
+					//return Removed;
+				} else {
+					return NotFound;
+				}
+			} else {
+				if (data[0] == data_to_remove) {
+					data[0] = data[1];
+					size = 1;
+					return Removed;
+				} else if (data[1] == data_to_remove) {
+					size = 1;
+					return Removed;
+				} else {
+					return NotFound;
+				}
+			}
+		}
+		if (size == 1) {
+			if (data_to_remove < data[0]) {
+				RemoveResult result = children[0]->remove(data_to_remove, this);
+				if (result == NeedParentRemove) {
+					//???
+				} else {
+					return result;
+				}
+			} else if (data_to_remove > data[0]) {
+				RemoveResult result = children[1]->remove(data_to_remove, this);
+				if (result == NeedParentRemove) {
+					//???
+				} else {
+					return result;
+				}
+			} else { // removing our only data
+				TreeNode* prev = children[0]->find_max_subtree();
+				assert(prev->children[0] == nullptr);
+				int prev_data = prev->get_max_data();
+				data[0] = prev_data;
+				//prev->remove(prev_data, parent???)
+				this->remove(prev_data, parent); // because we know prev, but don't know full sequence of parents
+
+			}
+		}
+	}
 
 	void print_as_tree() {
 		std::cout<<data[0];
