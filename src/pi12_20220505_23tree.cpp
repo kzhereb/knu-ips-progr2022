@@ -43,6 +43,7 @@ struct TreeNode {
 		this->size = 1;
 		this->children[0] = new TreeNode(data1, this);
 		this->children[1] = new TreeNode(data3, this);
+		this->children[2] = nullptr;
 
 		this->parent = parent;
 
