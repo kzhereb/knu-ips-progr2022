@@ -61,40 +61,6 @@ struct TreeNode {
 		}
 	}
 
-	void split(int data, TreeNode* child, TreeNode* new_children[2]) {
-		int data3[3];
-		TreeNode* child4[4];
-		if (data < child->data[0]) {
-			data3[0] = data;
-			data3[1] = child->data[0];
-			data3[2] = child->data[1];
-
-			TreeNode* new_children1[2] = {nullptr, nullptr};
-			split(data, child->children[0], new_children1);
-			child4[0] = new_children1[0];
-			child4[1] = new_children1[1];
-			child4[2] = child->children[1];
-			child4[3] = child->children[2];
-			TreeNode* temp = split(data3, child4);
-			new_children[0] = temp->children[0];
-			new_children[1] = temp->children[1];
-		}
-	}
-
-	TreeNode* split(int data[3], TreeNode* children[4]) {
-		TreeNode* result = new TreeNode(data[1]);
-
-		result->children[0] = new TreeNode(data[0]);
-		result->children[0]->children[0] = children[0];
-		result->children[0]->children[1] = children[1];
-
-		result->children[1] = new TreeNode(data[2]);
-		result->children[1]->children[0] = children[2];
-		result->children[1]->children[1] = children[3];
-
-		return result;
-	}
-
 	//return nullptr if added, else "4-node" (2-node with both children as 2-nodes)
 	TreeNode* add_and_split(int new_data) {
 		if (children[0] == nullptr) {
