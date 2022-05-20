@@ -161,39 +161,74 @@ void write_binary(std::ofstream& outfile, StudentTask task) {
 	write_binary(outfile, task.evaluation_result);
 }
 
+bool read_binary(std::ifstream& infile, int& value) {
+	if (infile.read(reinterpret_cast<char*>(&value), sizeof value)) {
+		return true;
+	} else {
+		return false;
+	}
+
+}
+
 int read_binary_int(std::ifstream& infile) {
 	int value;
-	infile.read(reinterpret_cast<char*>(&value), sizeof value);
+	read_binary(infile, value);
 	return value;
+}
+
+bool read_binary(std::ifstream& infile, float& value) {
+	if (infile.read(reinterpret_cast<char*>(&value), sizeof value)) {
+		return true;
+	} else {
+		return false;
+	}
+
 }
 
 float read_binary_float(std::ifstream& infile) {
 	float value;
-	infile.read(reinterpret_cast<char*>(&value), sizeof value);
+	read_binary(infile, value);
 	return value;
+}
+
+bool read_binary(std::ifstream& infile, std::string& value) {
+	if (std::getline(infile, value, '\0')) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 std::string read_binary_string(std::ifstream& infile) {
 	std::string value;
-	std::getline(infile, value, '\0');
+	read_binary(infile, value);
 	return value;
+}
+
+bool read_binary(std::ifstream& infile, StudentTask& task) {
+	if (!read_binary(infile, task.text)) { return false; }
+	if (!read_binary(infile, task.author)) { return false; }
+
+	if (!read_binary(infile, task.sent_time.year)) { return false; }
+	if (!read_binary(infile, task.sent_time.month)) { return false; }
+	if (!read_binary(infile, task.sent_time.day)) { return false; }
+	if (!read_binary(infile, task.sent_time.hour)) { return false; }
+	if (!read_binary(infile, task.sent_time.minute)) { return false; }
+	if (!read_binary(infile, task.sent_time.second)) { return false; }
+
+	int type;
+	if (!read_binary(infile, type)) { return false; }
+	task.type = (TaskType)type;
+
+	if (!read_binary(infile, task.evaluation_result)) { return false; }
+	return true;
+
 }
 
 StudentTask read_binary_student_task(std::ifstream& infile) {
 	StudentTask task;
 
-	task.text = read_binary_string(infile);
-	task.author = read_binary_string(infile);
-
-	task.sent_time.year = read_binary_int(infile);
-	task.sent_time.month = read_binary_int(infile);
-	task.sent_time.day = read_binary_int(infile);
-	task.sent_time.hour = read_binary_int(infile);
-	task.sent_time.minute = read_binary_int(infile);
-	task.sent_time.second = read_binary_int(infile);
-
-	task.type = (TaskType)read_binary_int(infile);
-	task.evaluation_result = read_binary_float(infile);
+	read_binary(infile, task);
 
 	return task;
 }
