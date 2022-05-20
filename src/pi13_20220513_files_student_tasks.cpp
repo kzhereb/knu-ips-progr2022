@@ -152,6 +152,12 @@ int read_binary_int(std::ifstream& infile) {
 	return value;
 }
 
+float read_binary_float(std::ifstream& infile) {
+	float value;
+	infile.read(reinterpret_cast<char*>(&value), sizeof value);
+	return value;
+}
+
 struct BinaryFileStorage {
 	MemoryStorage in_memory;
 	std::string filename;
@@ -216,10 +222,11 @@ int main() {
 
 	std::ofstream outfile{"test.bin"};
 	write_binary(outfile, 1256);
+	write_binary(outfile, 1.23f);
 	outfile.flush();
 
 	std::ifstream infile{"test.bin"};
-	std::cout<<read_binary_int(infile);
+	std::cout<<read_binary_int(infile)<<" "<<read_binary_float(infile);
 
 
 	return 0;
