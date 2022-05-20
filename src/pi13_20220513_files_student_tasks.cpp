@@ -98,7 +98,7 @@ struct StudentTask {
 	TaskType type;
 	float evaluation_result;
 
-	StudentTask(std::string text, std::string author, DateTime sent_time, TaskType type, float evaluation_result) {
+	StudentTask(std::string text="", std::string author="", DateTime sent_time = {0, 0, 0, 0, 0, 0}, TaskType type=MultipleChoice, float evaluation_result=0.0f) {
 		this->text = text;
 		this->author = author;
 		this->sent_time = sent_time;
@@ -146,6 +146,21 @@ void write_binary(std::ofstream& out, std::string value) {
 	out<<value<<'\0';
 }
 
+void write_binary(std::ofstream& outfile, StudentTask task) {
+	write_binary(outfile, task.text);
+	write_binary(outfile, task.author);
+
+	write_binary(outfile, task.sent_time.year);
+	write_binary(outfile, task.sent_time.month);
+	write_binary(outfile, task.sent_time.day);
+	write_binary(outfile, task.sent_time.hour);
+	write_binary(outfile, task.sent_time.minute);
+	write_binary(outfile, task.sent_time.second);
+
+	write_binary(outfile, task.type);
+	write_binary(outfile, task.evaluation_result);
+}
+
 int read_binary_int(std::ifstream& infile) {
 	int value;
 	infile.read(reinterpret_cast<char*>(&value), sizeof value);
@@ -162,6 +177,25 @@ std::string read_binary_string(std::ifstream& infile) {
 	std::string value;
 	std::getline(infile, value, '\0');
 	return value;
+}
+
+StudentTask read_binary_student_task(std::ifstream& infile) {
+	StudentTask task;
+
+	task.text = read_binary_string(infile);
+	task.author = read_binary_string(infile);
+
+	task.sent_time.year = read_binary_int(infile);
+	task.sent_time.month = read_binary_int(infile);
+	task.sent_time.day = read_binary_int(infile);
+	task.sent_time.hour = read_binary_int(infile);
+	task.sent_time.minute = read_binary_int(infile);
+	task.sent_time.second = read_binary_int(infile);
+
+	task.type = (TaskType)read_binary_int(infile);
+	task.evaluation_result = read_binary_float(infile);
+
+	return task;
 }
 
 struct BinaryFileStorage {
@@ -183,24 +217,29 @@ struct BinaryFileStorage {
 	void save() {
 		std::ofstream outfile {filename, std::ios::binary};
 
-
-
 		for(auto& task: in_memory.tasks) {
-			write_binary(outfile, task.text);
-			write_binary(outfile, task.author);
-
-			write_binary(outfile, task.sent_time.year);
-			write_binary(outfile, task.sent_time.month);
-			write_binary(outfile, task.sent_time.day);
-			write_binary(outfile, task.sent_time.hour);
-			write_binary(outfile, task.sent_time.minute);
-			write_binary(outfile, task.sent_time.second);
-
-			write_binary(outfile, task.type);
-			write_binary(outfile, task.evaluation_result);
+			write_binary(outfile, task);
+//			write_binary(outfile, task.text);
+//			write_binary(outfile, task.author);
+//
+//			write_binary(outfile, task.sent_time.year);
+//			write_binary(outfile, task.sent_time.month);
+//			write_binary(outfile, task.sent_time.day);
+//			write_binary(outfile, task.sent_time.hour);
+//			write_binary(outfile, task.sent_time.minute);
+//			write_binary(outfile, task.sent_time.second);
+//
+//			write_binary(outfile, task.type);
+//			write_binary(outfile, task.evaluation_result);
 		}
 
 		outfile.flush();
+	}
+
+	void load() {
+		std::ifstream infile {filename, std::ios::binary};
+
+
 	}
 
 
@@ -232,11 +271,13 @@ int main() {
 	write_binary(outfile, 1.23f);
 	write_binary(outfile,"hello");
 	write_binary(outfile,"world");
+	write_binary(outfile, task1);
 	outfile.flush();
 
 	std::ifstream infile{"test.bin"};
 	std::cout<<read_binary_int(infile)<<" "<<read_binary_string(infile)<<" "<<read_binary_float(infile)<<" "
-		<<read_binary_string(infile)<<" "<<read_binary_string(infile)<<" ";
+		<<read_binary_string(infile)<<" "<<read_binary_string(infile)<<"\n";
+	read_binary_student_task(infile).print();
 
 
 	return 0;
