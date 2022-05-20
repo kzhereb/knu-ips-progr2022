@@ -271,8 +271,24 @@ struct BinaryFileStorage {
 		outfile.flush();
 	}
 
-	void load() {
+	bool load() {
 		std::ifstream infile {filename, std::ios::binary};
+
+		while (true) {
+			StudentTask task;
+			if (read_binary(infile, task)) {
+				in_memory.add(task);
+				continue;
+			}
+			if (infile.eof()) {
+				return true; //reached end of file
+			}
+			if (infile.fail()) {
+				return false; //some error
+			}
+			return false; // should not reach this
+
+		}
 
 
 	}
@@ -299,6 +315,14 @@ int main() {
 	binary.print();
 	binary.save();
 	std::cout<<"binary file saved to "<<binary.filename<<std::endl;
+
+	BinaryFileStorage binary2{"tasks.bin"};
+	if (binary2.load()) {
+		std::cout<<"load success from "<<binary2.filename<<std::endl;
+		binary2.print();
+	} else {
+		std::cerr<<"failed to load from "<<binary2.filename<<std::endl;
+	}
 
 	std::ofstream outfile{"test.bin"};
 	write_binary(outfile, 1256);
