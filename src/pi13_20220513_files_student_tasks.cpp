@@ -124,6 +124,12 @@ struct MemoryStorage {
 		tasks.push_back(task);
 	}
 
+	std::vector<StudentTask> search_by_text_fragment(std::string text_fragment) {
+		std::vector<StudentTask> result;
+		//...
+		return result;
+	}
+
 	void print() {
 		std::cout<<"Total number of tasks stored: "<<tasks.size()<<std::endl;
 		for(auto& task: tasks) {
