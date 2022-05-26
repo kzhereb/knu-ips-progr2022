@@ -243,7 +243,7 @@ struct TreeNode {
 	}
 
 	// can set size to 0, this means parent needs to fix it
-	RemoveResult remove(int data_to_remove, TreeNode* parent){
+	RemoveResult remove(int data_to_remove){
 		if (children[0] == nullptr) {
 			if (size == 1) {
 				if (data[0] == data_to_remove) {
@@ -267,7 +267,7 @@ struct TreeNode {
 		}
 		if (size == 1) {
 			if (data_to_remove < data[0]) {
-				RemoveResult result = children[0]->remove(data_to_remove, this);
+				RemoveResult result = children[0]->remove(data_to_remove);
 				if (result == NeedParentRemove) {
 					rebalance(0);
 					if (this->size == 0) {return NeedParentRemove;}
@@ -276,7 +276,7 @@ struct TreeNode {
 					return result;
 				}
 			} else if (data_to_remove > data[0]) {
-				RemoveResult result = children[1]->remove(data_to_remove, this);
+				RemoveResult result = children[1]->remove(data_to_remove);
 				if (result == NeedParentRemove) {
 					rebalance(1);
 					if (this->size == 0) {return NeedParentRemove;}
@@ -290,7 +290,7 @@ struct TreeNode {
 				int prev_data = prev->get_max_data();
 				data[0] = prev_data;
 				//prev->remove(prev_data, parent???)
-				RemoveResult result = this->children[0]->remove(prev_data, this); // because we know prev, but don't know full sequence of parents
+				RemoveResult result = this->children[0]->remove(prev_data); // because we know prev, but don't know full sequence of parents
 				assert(result != NotFound);
 				if (result == Removed) { return Removed;}
 				rebalance(0);
@@ -300,7 +300,7 @@ struct TreeNode {
 		}
 		if (size == 2) {
 			if (data_to_remove < data[0]) {
-				RemoveResult result = children[0]->remove(data_to_remove, this);
+				RemoveResult result = children[0]->remove(data_to_remove);
 				if (result == NeedParentRemove) {
 					rebalance(0);
 					assert(this->size > 0);
@@ -313,7 +313,7 @@ struct TreeNode {
 				assert(prev->children[0] == nullptr);
 				int prev_data = prev->get_max_data();
 				data[0] = prev_data;
-				RemoveResult result = this->children[0]->remove(prev_data, this); // because we know prev, but don't know full sequence of parents
+				RemoveResult result = this->children[0]->remove(prev_data); // because we know prev, but don't know full sequence of parents
 				assert(result != NotFound);
 				if (result == Removed) { return Removed;}
 				rebalance(0);
@@ -321,7 +321,7 @@ struct TreeNode {
 				return Removed;
 			}
 			else if (data_to_remove < data[1]) {
-				RemoveResult result = children[1]->remove(data_to_remove, this);
+				RemoveResult result = children[1]->remove(data_to_remove);
 				if (result == NeedParentRemove) {
 					rebalance(1);
 					assert(this->size > 0);
@@ -334,14 +334,14 @@ struct TreeNode {
 				assert(prev->children[0] == nullptr);
 				int prev_data = prev->get_max_data();
 				data[1] = prev_data;
-				RemoveResult result = this->children[1]->remove(prev_data, this); // because we know prev, but don't know full sequence of parents
+				RemoveResult result = this->children[1]->remove(prev_data); // because we know prev, but don't know full sequence of parents
 				assert(result != NotFound);
 				if (result == Removed) { return Removed;}
 				rebalance(1);
 				assert(this->size > 0);
 				return Removed;
 			} else { // data_to_remove > data[1]
-				RemoveResult result = children[2]->remove(data_to_remove, this);
+				RemoveResult result = children[2]->remove(data_to_remove);
 				if (result == NeedParentRemove) {
 					rebalance(2);
 					assert(this->size > 0);
@@ -413,7 +413,7 @@ struct B23Tree {
 	}
 
 	bool remove(int data) {
-		TreeNode::RemoveResult result = root->remove(data, nullptr);
+		TreeNode::RemoveResult result = root->remove(data);
 		if (result == TreeNode::NotFound) {return false;}
 		if (result == TreeNode::Removed) {return true;}
 		if (result == TreeNode::NeedParentRemove) {
