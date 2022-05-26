@@ -153,16 +153,106 @@ struct TreeNode {
 	}
 	enum RemoveResult {Removed, NotFound, NeedParentRemove};
 
+	//void rebalance(TreeNode* current_child, TreeNode* left_child, TreeNode* right_child) {
+	// returns true if rebalance complete - no need to rebalance parent
+	bool rebalance(int index_current_child) {
+		assert(index_current_child < size + 1);
+		TreeNode* current_child = children[index_current_child];
+		assert(current_child);
+		assert(current_child->size == 0);
+		TreeNode* left_child = nullptr;
+		if (index_current_child > 0) { left_child = children[index_current_child-1]; }
+		TreeNode *right_child = (index_current_child < size) ?
+									children[index_current_child + 1] :
+									nullptr;
+		assert(left_child != nullptr || right_child != nullptr);
+
+		if (left_child && left_child->size == 2) {
+			current_child->data[0] = this->data[index_current_child - 1];
+			this->data[index_current_child - 1] = left_child->data[1];
+
+			current_child->children[1] = current_child->children[0];
+			current_child->children[0] = left_child->children[2];
+
+			current_child->size = 1;
+			left_child->size = 1;
+			return true;
+		}
+
+		if (right_child && right_child->size == 2) {
+			current_child->data[0] = this->data[index_current_child + 1];
+			this->data[index_current_child + 1] = right_child->data[0];
+			right_child->data[0] = right_child->data[1];
+
+			current_child->children[1] = right_child->children[0];
+			right_child->children[0] = right_child->children[1];
+			right_child->children[1] = right_child->children[2];
+			right_child->children[2] = nullptr;
+
+			current_child->size = 1;
+			right_child->size = 1;
+			return true;
+		}
+
+		if (left_child) {
+			assert(left_child->size == 1);
+
+			left_child->data[1] = this->data[index_current_child - 1];
+
+			left_child->children[2] = current_child->children[0];
+
+			left_child->size = 2;
+			this->size--;
+
+			if (this->size == 1 && index_current_child == 1) {
+				this->data[0] = this->data[1];
+				this->children[1] = this->children[2];
+				return true;
+			}
+			if (this->size == 0) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+		assert(right_child!=nullptr);
+		assert(right_child->size == 1);
+
+		right_child->data[1] = right_child->data[0];
+		right_child->data[0] = this->data[index_current_child + 1];
+
+		right_child->children[2] = right_child->children[1];
+		right_child->children[1] = right_child->children[0];
+		right_child->children[0] = current_child->children[0];
+
+		right_child->size = 2;
+		this->size--;
+
+		if (this->size == 1 && index_current_child == 0) {
+			this->data[0] = this->data[1];
+			this->children[1] = this->children[2];
+		}
+
+		if (this->size == 0) {
+			this->children[0] = this->children[1];
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+
+	// can set size to 0, this means parent needs to fix it
 	RemoveResult remove(int data_to_remove, TreeNode* parent){
 		if (children[0] == nullptr) {
 			if (size == 1) {
 				if (data[0] == data_to_remove) {
-					// rebalance
-					//return Removed;
+					size = 0;
+					return NeedParentRemove;
 				} else {
 					return NotFound;
 				}
-			} else {
+			} else { // size == 2
 				if (data[0] == data_to_remove) {
 					data[0] = data[1];
 					size = 1;
@@ -179,14 +269,18 @@ struct TreeNode {
 			if (data_to_remove < data[0]) {
 				RemoveResult result = children[0]->remove(data_to_remove, this);
 				if (result == NeedParentRemove) {
-					//???
+					rebalance(0);
+					if (this->size == 0) {return NeedParentRemove;}
+					else { return Removed;}
 				} else {
 					return result;
 				}
 			} else if (data_to_remove > data[0]) {
 				RemoveResult result = children[1]->remove(data_to_remove, this);
 				if (result == NeedParentRemove) {
-					//???
+					rebalance(1);
+					if (this->size == 0) {return NeedParentRemove;}
+					else { return Removed;}
 				} else {
 					return result;
 				}
@@ -196,10 +290,68 @@ struct TreeNode {
 				int prev_data = prev->get_max_data();
 				data[0] = prev_data;
 				//prev->remove(prev_data, parent???)
-				this->remove(prev_data, parent); // because we know prev, but don't know full sequence of parents
-
+				RemoveResult result = this->children[0]->remove(prev_data, this); // because we know prev, but don't know full sequence of parents
+				assert(result != NotFound);
+				if (result == Removed) { return Removed;}
+				rebalance(0);
+				if (this->size == 0) {return NeedParentRemove;}
+				else { return Removed;}
 			}
 		}
+		if (size == 2) {
+			if (data_to_remove < data[0]) {
+				RemoveResult result = children[0]->remove(data_to_remove, this);
+				if (result == NeedParentRemove) {
+					rebalance(0);
+					assert(this->size > 0);
+					return Removed;
+				} else {
+					return result;
+				}
+			} else if (data_to_remove == data[0]) {
+				TreeNode* prev = children[0]->find_max_subtree();
+				assert(prev->children[0] == nullptr);
+				int prev_data = prev->get_max_data();
+				data[0] = prev_data;
+				RemoveResult result = this->children[0]->remove(prev_data, this); // because we know prev, but don't know full sequence of parents
+				assert(result != NotFound);
+				if (result == Removed) { return Removed;}
+				rebalance(0);
+				assert(this->size > 0);
+				return Removed;
+			}
+			else if (data_to_remove < data[1]) {
+				RemoveResult result = children[1]->remove(data_to_remove, this);
+				if (result == NeedParentRemove) {
+					rebalance(1);
+					assert(this->size > 0);
+					return Removed;
+				} else {
+					return result;
+				}
+			} else if (data_to_remove == data[1]) {
+				TreeNode* prev = children[1]->find_max_subtree();
+				assert(prev->children[0] == nullptr);
+				int prev_data = prev->get_max_data();
+				data[1] = prev_data;
+				RemoveResult result = this->children[1]->remove(prev_data, this); // because we know prev, but don't know full sequence of parents
+				assert(result != NotFound);
+				if (result == Removed) { return Removed;}
+				rebalance(1);
+				assert(this->size > 0);
+				return Removed;
+			} else { // data_to_remove > data[1]
+				RemoveResult result = children[2]->remove(data_to_remove, this);
+				if (result == NeedParentRemove) {
+					rebalance(2);
+					assert(this->size > 0);
+					return Removed;
+				} else {
+					return result;
+				}
+			}
+		}
+
 	}
 
 	void print_as_tree() {
@@ -260,6 +412,16 @@ struct B23Tree {
 
 	}
 
+	bool remove(int data) {
+		TreeNode::RemoveResult result = root->remove(data, nullptr);
+		if (result == TreeNode::NotFound) {return false;}
+		if (result == TreeNode::Removed) {return true;}
+		if (result == TreeNode::NeedParentRemove) {
+			root = root->children[0];
+			return true;
+		}
+	}
+
 	void print_as_tree() {
 		if(root) { root->print_as_tree();}
 		else { std::cout<<"empty tree";}
@@ -310,6 +472,21 @@ int main(){
 	tree.add(6);
 	tree.print_all();
 	tree.add(7);
+	tree.print_all();
+
+	tree.remove(7);
+	tree.print_all();
+	tree.remove(6);
+	tree.print_all();
+	tree.remove(5);
+	tree.print_all();
+	tree.remove(4);
+	tree.print_all();
+	tree.remove(3);
+	tree.print_all();
+	tree.remove(2);
+	tree.print_all();
+	tree.remove(1);
 	tree.print_all();
 
 	std::cout<<"random shuffle"<<std::endl;
