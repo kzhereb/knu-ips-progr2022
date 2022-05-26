@@ -18,7 +18,7 @@ struct TreeNode {
 	int data[2];
 	int size; // number of data items
 	TreeNode* children[3];
-	TreeNode* parent;
+	TreeNode* parent; //TODO: can be removed
 
 	TreeNode(int data1, TreeNode* parent = nullptr) {
 		this->data[0] = data1;
