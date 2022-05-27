@@ -158,9 +158,11 @@ struct MemoryStorage {
 
 	std::vector<StudentTask> search_by_author_time_range(std::string author_find, DateTime time_min, DateTime time_max) {
 	  std::vector<StudentTask> result;
-	  for (std::size_t i = 0; i < tasks.size(); i++) {
-	    if (tasks[i].author == author_find and time_comp(tasks[i].sent_time, time_min) == false && time_comp(tasks[i].sent_time, time_max) == true) {
-	      result.push_back(tasks[i]);
+	  for(auto& task: tasks) {
+	    if (task.author == author_find &&
+	    	!time_comp(task.sent_time, time_min) &&
+			time_comp(task.sent_time, time_max) ){
+	      result.push_back(task);
 	    }
 	  }
 	  return result;
