@@ -118,12 +118,25 @@ struct StudentTask {
 };
 //returns true if one<two
 bool time_comp(DateTime one, DateTime two) {
-  if (one.year < two.year or (one.year == two.year and (one.month < two.month or (one.month == two.month and (one.day < two.day or (one.day == two.day and (one.hour < two.hour or (one.hour == two.hour and (one.minute < two.minute or (one.minute == two.minute and one.second <= two.second)))))))))) {
-    return true;
-  }
-  else if (one.year > two.year or (one.year == two.year and (one.month > two.month or (one.month == two.month and (one.day > two.day or (one.day == two.day and (one.hour > two.hour or (one.hour == two.hour and (one.minute > two.minute or (one.minute == two.minute and one.second >= two.second)))))))))) {
-    return false;
-  }
+  if (one.year < two.year) { return true; }
+  if (one.year > two.year) { return false; }
+
+  if (one.month < two.month) { return true; }
+  if (one.month > two.month) { return false; }
+
+  if (one.day < two.day) { return true; }
+  if (one.day > two.day) { return false; }
+
+  if (one.hour < two.hour) { return true; }
+  if (one.hour > two.hour) { return false; }
+
+  if (one.minute < two.minute) { return true; }
+  if (one.minute > two.minute) { return false; }
+
+  if (one.second < two.second) { return true; }
+  if (one.second > two.second) { return false; }
+
+  return false;
 }
 
 struct MemoryStorage {
