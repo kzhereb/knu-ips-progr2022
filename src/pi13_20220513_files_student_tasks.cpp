@@ -198,6 +198,16 @@ struct MemoryStorage {
 	  return result;
 	}
 
+	std::vector<StudentTask> search_by_type_time(TaskType type_find, DateTime time_max) {
+	  std::vector<StudentTask> result;
+	  for(auto& task: tasks) {
+	    if (task.type == type_find && task.sent_time < time_max) {
+	      result.push_back(task);
+	    }
+	  }
+	  return result;
+	}
+
 	void print() {
 		std::cout<<"Total number of tasks stored: "<<tasks.size()<<std::endl;
 		for(auto& task: tasks) {
@@ -392,6 +402,14 @@ int main() {
 
 	std::cout<<"searching for 'Ivan Petrenko' in 2022:"<<std::endl;
 	found = memory.search_by_author_time_range("Ivan Petrenko",{2022, 1, 1, 0, 0, 0},{2023, 1, 1, 0, 0, 0});
+	std::cout<<"Found tasks: "<<found.size()<<std::endl;
+	for(auto& task: found) {
+		task.print();
+		std::cout<<std::endl;
+	}
+
+	std::cout<<"searching for Multiple Choice before 2022:"<<std::endl;
+	found = memory.search_by_type_time(MultipleChoice,{2022, 1, 1, 0, 0, 0});
 	std::cout<<"Found tasks: "<<found.size()<<std::endl;
 	for(auto& task: found) {
 		task.print();
