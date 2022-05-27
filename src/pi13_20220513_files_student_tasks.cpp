@@ -116,6 +116,15 @@ struct StudentTask {
 		std::cout<<"Evaluation result: "<<evaluation_result<<std::endl;
 	}
 };
+//returns true if one<two
+bool time_comp(DateTime one, DateTime two) {
+  if (one.year < two.year or (one.year == two.year and (one.month < two.month or (one.month == two.month and (one.day < two.day or (one.day == two.day and (one.hour < two.hour or (one.hour == two.hour and (one.minute < two.minute or (one.minute == two.minute and one.second <= two.second)))))))))) {
+    return true;
+  }
+  else if (one.year > two.year or (one.year == two.year and (one.month > two.month or (one.month == two.month and (one.day > two.day or (one.day == two.day and (one.hour > two.hour or (one.hour == two.hour and (one.minute > two.minute or (one.minute == two.minute and one.second >= two.second)))))))))) {
+    return false;
+  }
+}
 
 struct MemoryStorage {
 	std::vector<StudentTask> tasks;
@@ -132,6 +141,16 @@ struct MemoryStorage {
 			}
 		}
 		return result;
+	}
+
+	std::vector<StudentTask> search_by_author_time_range(std::string author_find, DateTime time_min, DateTime time_max) {
+	  std::vector<StudentTask> result;
+	  for (std::size_t i = 0; i < tasks.size(); i++) {
+	    if (tasks[i].author == author_find and time_comp(tasks[i].sent_time, time_min) == false && time_comp(tasks[i].sent_time, time_max) == true) {
+	      result.push_back(tasks[i]);
+	    }
+	  }
+	  return result;
 	}
 
 	void print() {
@@ -313,7 +332,7 @@ int main() {
 	StudentTask task1 {"MyTask","Ivan Petrenko", DateTime(2022, 5, 13, 11, 55, 2), FreeFormText, 5.5};
 	memory.add(task1);
 
-	memory.add({"1: a, 2:c, 3:d", "Ivan Petrenko", {2022, 5, 13, 12, 0, 0}, MultipleChoice, 2.1});
+	memory.add({"1: a, 2:c, 3:d", "Ivan Petrenko", {2021, 5, 13, 12, 0, 0}, MultipleChoice, 2.1});
 
 
 	memory.print();
@@ -326,6 +345,13 @@ int main() {
 		std::cout<<std::endl;
 	}
 
+	std::cout<<"searching for 'Ivan Petrenko' in 2022:"<<std::endl;
+	found = memory.search_by_author_time_range("Ivan Petrenko",{2022, 1, 1, 0, 0, 0},{2023, 1, 1, 0, 0, 0});
+	std::cout<<"Found tasks: "<<found.size()<<std::endl;
+	for(auto& task: found) {
+		task.print();
+		std::cout<<std::endl;
+	}
 
 	BinaryFileStorage binary{"tasks.bin"};
 	binary.add(task1);
