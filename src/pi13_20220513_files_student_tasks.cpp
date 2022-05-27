@@ -126,9 +126,9 @@ struct MemoryStorage {
 
 	std::vector<StudentTask> search_by_text_fragment(std::string text_fragment) {
 		std::vector<StudentTask> result;
-		for (std::size_t i = 0; i < tasks.size(); i++) {
-			if ((tasks[i].text).find(text_fragment) != std::string::npos) {
-				result.push_back(tasks[i]);
+		for(auto& task: tasks) {
+			if ((task.text).find(text_fragment) != std::string::npos) {
+				result.push_back(task);
 			}
 		}
 		return result;
