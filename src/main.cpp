@@ -5,7 +5,7 @@
  *      Author: KZ
  */
 
-#define current_namespace pi12_20220505_23tree
+#define current_namespace pi13_20220513_files_student_tasks
 
 namespace current_namespace {
 	int main();

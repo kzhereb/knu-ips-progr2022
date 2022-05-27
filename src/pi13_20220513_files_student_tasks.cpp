@@ -126,7 +126,11 @@ struct MemoryStorage {
 
 	std::vector<StudentTask> search_by_text_fragment(std::string text_fragment) {
 		std::vector<StudentTask> result;
-		//...
+		for (std::size_t i = 0; i < tasks.size(); i++) {
+			if ((tasks[i].text).find(text_fragment) != std::string::npos) {
+				result.push_back(tasks[i]);
+			}
+		}
 		return result;
 	}
 
@@ -313,6 +317,15 @@ int main() {
 
 
 	memory.print();
+
+	std::cout<<"searching for 'Task':"<<std::endl;
+	std::vector<StudentTask> found = memory.search_by_text_fragment("Task");
+	std::cout<<"Found tasks: "<<found.size()<<std::endl;
+	for(auto& task: found) {
+		task.print();
+		std::cout<<std::endl;
+	}
+
 
 	BinaryFileStorage binary{"tasks.bin"};
 	binary.add(task1);
