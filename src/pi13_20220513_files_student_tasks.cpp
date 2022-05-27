@@ -116,27 +116,57 @@ struct StudentTask {
 		std::cout<<"Evaluation result: "<<evaluation_result<<std::endl;
 	}
 };
-//returns true if one<two
-bool time_comp(DateTime one, DateTime two) {
-  if (one.year < two.year) { return true; }
-  if (one.year > two.year) { return false; }
+//returns value<0 if one<two, 0 if one==two, value>0 if one>two
+int time_comp(DateTime one, DateTime two) {
+  if (one.year < two.year) { return -1; }
+  if (one.year > two.year) { return 1; }
 
-  if (one.month < two.month) { return true; }
-  if (one.month > two.month) { return false; }
+  if (one.month < two.month) { return -1; }
+  if (one.month > two.month) { return 1; }
 
-  if (one.day < two.day) { return true; }
-  if (one.day > two.day) { return false; }
+  if (one.day < two.day) { return -1; }
+  if (one.day > two.day) { return 1; }
 
-  if (one.hour < two.hour) { return true; }
-  if (one.hour > two.hour) { return false; }
+  if (one.hour < two.hour) { return -1; }
+  if (one.hour > two.hour) { return 1; }
 
-  if (one.minute < two.minute) { return true; }
-  if (one.minute > two.minute) { return false; }
+  if (one.minute < two.minute) { return -1; }
+  if (one.minute > two.minute) { return 1; }
 
-  if (one.second < two.second) { return true; }
-  if (one.second > two.second) { return false; }
+  if (one.second < two.second) { return -1; }
+  if (one.second > two.second) { return 1; }
 
-  return false;
+  return 0;
+}
+
+bool operator<(DateTime one, DateTime two) {
+	if (time_comp(one, two)<0) {return true;}
+	return false;
+}
+
+bool operator<=(DateTime one, DateTime two) {
+	if (time_comp(one, two)<=0) {return true;}
+	return false;
+}
+
+bool operator>(DateTime one, DateTime two) {
+	if (time_comp(one, two)>0) {return true;}
+	return false;
+}
+
+bool operator>=(DateTime one, DateTime two) {
+	if (time_comp(one, two)>=0) {return true;}
+	return false;
+}
+
+bool operator==(DateTime one, DateTime two) {
+	if (time_comp(one, two)==0) {return true;}
+	return false;
+}
+
+bool operator!=(DateTime one, DateTime two) {
+	if (time_comp(one, two)!=0) {return true;}
+	return false;
 }
 
 struct MemoryStorage {
@@ -159,9 +189,9 @@ struct MemoryStorage {
 	std::vector<StudentTask> search_by_author_time_range(std::string author_find, DateTime time_min, DateTime time_max) {
 	  std::vector<StudentTask> result;
 	  for(auto& task: tasks) {
-	    if (task.author == author_find &&
-	    	!time_comp(task.sent_time, time_min) &&
-			time_comp(task.sent_time, time_max) ){
+	    if (task.author == author_find && time_min <= task.sent_time && task.sent_time <= time_max) {
+	    	//!time_comp(task.sent_time, time_min) &&
+			//time_comp(task.sent_time, time_max) ){
 	      result.push_back(task);
 	    }
 	  }
