@@ -6,6 +6,9 @@
  */
 
 #include <iostream>
+#include <string>
+#include <cassert>
+#include <cctype>
 
 namespace pi12_20220602_tasks {
 
@@ -78,6 +81,65 @@ void print(ListNode* start) {
 	std::cout<<std::endl;
 }
 
+void push(ListNode*& start, int data) {
+	ListNode* new_node = new ListNode;
+	new_node->data = data;
+	new_node->next = start;
+	start = new_node;
+}
+
+int pop(ListNode*& start) {
+	assert(start!=nullptr);
+	int result = start->data;
+	ListNode* to_delete = start;
+	start = start->next;
+	delete to_delete;
+	return result;
+
+}
+
+int peek(ListNode* start) {
+	assert(start!=nullptr);
+	return start->data;
+}
+
+bool is_empty(ListNode* start) {
+	return start == nullptr;
+}
+
+std::string infix_to_postfix(std::string infix) {
+	std::string current_number="";
+	std::string result = "";
+	ListNode* stack = nullptr;
+	const int DIVIDE = -10;
+	const int MINUS = -20;
+	for(std::size_t i = 0; i<infix.size(); i++) {
+		char current = infix[i];
+		if (std::isdigit(static_cast<unsigned char>(current))) {
+			current_number+=current;
+		} else if (current == '/') {
+			//int value = std::stoi(current_number);
+			current_number = "";
+			result += current_number + " ";
+			if (!is_empty(stack) && peek(stack) == DIVIDE) {
+				pop(stack);
+				result+= "/ ";
+			}
+			push(stack, DIVIDE);
+		} else if (current == '-') {
+			//int value = std::stoi(current_number);
+			current_number = "";
+			result += current_number + " ";
+			if (!is_empty(stack)) {
+				int prev = pop(stack);
+				if (prev == DIVIDE) { result+= "/ ";}
+				else if (prev == MINUS) {result+= "- ";}
+			}
+			push(stack, MINUS);
+		}
+	}
+	// output all operators from stack
+}
 
 int main() {
 	ListNode* start = nullptr;
