@@ -9,6 +9,7 @@
 #include <vector>
 //#include <iterator>
 #include <algorithm>
+#include <numeric>
 #include <random>
 #include <cassert>
 
@@ -442,8 +443,12 @@ struct B23Tree {
 
 };
 
-std::vector<int> get_random_shuffle() {
-    std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+
+
+
+std::vector<int> get_random_shuffle(std::initializer_list<int> values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}) {
+    std::vector<int> v = values;
 
     std::random_device rd;
     std::mt19937 g(rd());
@@ -473,12 +478,76 @@ std::vector<int> get_random_vector(size_t size, int min_value, int max_value) {
 //    std::cout << "\n";
 }
 
+std::vector<int> get_random_norepeat_vector(int min_value, int max_value) {
+  assert(min_value<max_value);
+  size_t size = max_value - min_value + 1;
+
+  std::vector<int> result(size);
+  std::iota(result.begin(), result.end(), min_value);
+
+  std::random_device rd;
+  std::mt19937 gen(rd());
+
+  std::shuffle(result.begin(), result.end(), gen);
+
+  return result;
+
+//    std::copy(v.begin(), v.end(), std::ostream_iterator<int>(std::cout, " "));
+//    std::cout << "\n";
+}
+
 
 void test_random_vector() {
   std::cout<<"create large vector of positive and negative values, then remove all positive"<<std::endl;
 
   B23Tree tree;
   std::vector<int> values = get_random_vector(100, -100, 100);
+  for(int item: values) {
+    std::cout<<"adding value "<<item<<std::endl;
+    tree.add(item);
+    tree.print_all();
+  }
+  for(int i=0; i<=100; i++) {
+    std::cout<<"removing value "<<i<<std::endl;
+    tree.remove(i);
+    tree.print_all();
+  }
+}
+
+void test_repeated_values() {
+  B23Tree tree;
+  std::vector<int> values = get_random_shuffle({1, 1, 2, 3, 8, 10, 13, 13, 14, 14, 15, 17, 32});
+  // 8, 17, 32, 14, 13, 3, 1, 1, 15, 2, 10, 14, 13
+  for(int item: values) {
+    std::cout<<"adding value "<<item<<std::endl;
+    tree.add(item);
+    tree.print_all();
+  }
+  for(int i=0; i<=100; i++) {
+    std::cout<<"removing value "<<i<<std::endl;
+    tree.remove(i);
+    tree.print_all();
+  }
+}
+
+void test_norepeated_values() {
+  B23Tree tree;
+  std::vector<int> values = get_random_norepeat_vector(-5, 5);
+  for(int item: values) {
+    std::cout<<"adding value "<<item<<std::endl;
+    tree.add(item);
+    tree.print_all();
+  }
+  for(int i=0; i<=100; i++) {
+    std::cout<<"removing value "<<i<<std::endl;
+    tree.remove(i);
+    tree.print_all();
+  }
+}
+
+void test_fixed_vector(std::initializer_list<int> input) {
+  B23Tree tree;
+  std::vector<int> values = input;
   for(int item: values) {
     std::cout<<"adding value "<<item<<std::endl;
     tree.add(item);
@@ -540,8 +609,10 @@ int main(){
 	root_prev->print_as_tree();
 	assert(root_prev->get_max_data() == tree2.root->data[0] - 1);
 
-	test_random_vector();
-
+	//test_random_vector();
+	//test_repeated_values();
+	//test_norepeated_values();
+	test_fixed_vector({3, -3, 5, -4, -5, -1, 0, -2, 4, 1, 2});
 
 	return 0;
 }
