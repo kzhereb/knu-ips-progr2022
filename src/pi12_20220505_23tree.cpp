@@ -28,6 +28,7 @@ struct TreeNode {
 	}
 
 	TreeNode(int data1, int data2, TreeNode* parent = nullptr) {
+	  assert(data1<=data2);
 		this->data[0] = data1;
 		this->data[1] = data2;
 		this->size = 2;
@@ -36,8 +37,8 @@ struct TreeNode {
 	}
 
 	TreeNode(int data1, int data2, int data3, TreeNode* parent = nullptr) {
-		assert(data1<data2);
-		assert(data2<data3);
+		assert(data1<=data2);
+		assert(data2<=data3);
 
 		this->data[0] = data2;
 		this->size = 1;
@@ -455,6 +456,41 @@ std::vector<int> get_random_shuffle() {
 //    std::cout << "\n";
 }
 
+std::vector<int> get_random_vector(size_t size, int min_value, int max_value) {
+    std::vector<int> result(size);
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_int_distribution<> dist(min_value, max_value);
+    for (size_t i = 0; i<size; i++) {
+      result[i] = dist(gen);
+    }
+
+    return result;
+
+//    std::copy(v.begin(), v.end(), std::ostream_iterator<int>(std::cout, " "));
+//    std::cout << "\n";
+}
+
+
+void test_random_vector() {
+  std::cout<<"create large vector of positive and negative values, then remove all positive"<<std::endl;
+
+  B23Tree tree;
+  std::vector<int> values = get_random_vector(100, -100, 100);
+  for(int item: values) {
+    std::cout<<"adding value "<<item<<std::endl;
+    tree.add(item);
+    tree.print_all();
+  }
+  for(int i=0; i<=100; i++) {
+    std::cout<<"removing value "<<i<<std::endl;
+    tree.remove(i);
+    tree.print_all();
+  }
+}
+
 
 int main(){
 	B23Tree tree;
@@ -503,6 +539,8 @@ int main(){
 	TreeNode* root_prev = tree2.root->children[0]->find_max_subtree();
 	root_prev->print_as_tree();
 	assert(root_prev->get_max_data() == tree2.root->data[0] - 1);
+
+	test_random_vector();
 
 
 	return 0;
