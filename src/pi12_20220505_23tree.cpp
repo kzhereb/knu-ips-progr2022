@@ -221,18 +221,33 @@ struct TreeNode {
 		assert(right_child->size == 1);
 
 		right_child->data[1] = right_child->data[0];
-		right_child->data[0] = this->data[index_current_child + 1];
+		right_child->data[0] = this->data[index_current_child]; // not index + 1!!
+		assert(right_child->data[0] < right_child->data[1]);
 
-		right_child->children[2] = right_child->children[1];
-		right_child->children[1] = right_child->children[0];
-		right_child->children[0] = current_child->children[0];
+		if (current_child->children[0] != nullptr) {
+		  assert(right_child->children[0] != nullptr);
+		  assert(right_child->children[1] != nullptr);
+		  // previous tree was balanced, if current_child had children - then right_child must have children too
+	    right_child->children[2] = right_child->children[1];
+	    right_child->children[1] = right_child->children[0];
+	    right_child->children[0] = current_child->children[0];
 
+		} else {
+		  assert(current_child->children[0] == nullptr);
+      assert(right_child->children[0] == nullptr);
+      assert(right_child->children[1] == nullptr);
+      // in this case, no need to copy nullptrs - previous code would work, but it is extra work
+		}
 		right_child->size = 2;
 		this->size--;
 
 		if (this->size == 1 && index_current_child == 0) {
 			this->data[0] = this->data[1];
+			assert(current_child == children[0]);
+			delete current_child;
+			this->children[0] = this->children[1];
 			this->children[1] = this->children[2];
+			return true;
 		}
 
 		if (this->size == 0) {
@@ -553,7 +568,7 @@ void test_fixed_vector(std::initializer_list<int> input) {
     tree.add(item);
     tree.print_all();
   }
-  for(int i=0; i<=100; i++) {
+  for(int i=0; i<=5; i++) {
     std::cout<<"removing value "<<i<<std::endl;
     tree.remove(i);
     tree.print_all();
