@@ -247,6 +247,7 @@ struct TreeNode {
 			delete current_child;
 			this->children[0] = this->children[1];
 			this->children[1] = this->children[2];
+			this->children[2] = nullptr;
 			return true;
 		}
 
