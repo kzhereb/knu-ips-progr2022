@@ -170,11 +170,13 @@ struct TreeNode {
 		assert(left_child != nullptr || right_child != nullptr);
 
 		if (left_child && left_child->size == 2) {
+		  assert(index_current_child - 1 >= 0); // can access data in next lines
 			current_child->data[0] = this->data[index_current_child - 1];
 			this->data[index_current_child - 1] = left_child->data[1];
 
 			current_child->children[1] = current_child->children[0];
 			current_child->children[0] = left_child->children[2];
+			left_child->children[2] = nullptr;
 
 			current_child->size = 1;
 			left_child->size = 1;
@@ -199,6 +201,7 @@ struct TreeNode {
 
 		if (left_child) {
 			assert(left_child->size == 1);
+			assert(index_current_child - 1 >=0);
 
 			left_child->data[1] = this->data[index_current_child - 1];
 
@@ -209,7 +212,10 @@ struct TreeNode {
 
 			if (this->size == 1 && index_current_child == 1) {
 				this->data[0] = this->data[1];
+				assert(current_child == children[1]);
+				delete current_child;
 				this->children[1] = this->children[2];
+				this->children[2] = nullptr;
 				return true;
 			}
 			if (this->size == 0) {
