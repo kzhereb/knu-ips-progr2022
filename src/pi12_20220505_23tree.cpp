@@ -210,19 +210,33 @@ struct TreeNode {
 			left_child->size = 2;
 			this->size--;
 
-			if (this->size == 1 && index_current_child == 1) {
+			if (this->size == 0) {
+			  assert(this->children[0] == left_child);
+			  assert(this->children[1] == current_child);
+			  assert(this->children[2] == nullptr);
+			  delete current_child;
+			  this->children[1] = nullptr; // maybe not needed - this will be fixed in parent rebalance?
+			  return false;
+			}
+			assert(this->size == 1);
+			if (index_current_child == 1) {
 				this->data[0] = this->data[1];
-				assert(current_child == children[1]);
+				assert(this->children[0] == left_child);
+				assert(this->children[1] == current_child);
 				delete current_child;
 				this->children[1] = this->children[2];
 				this->children[2] = nullptr;
 				return true;
 			}
-			if (this->size == 0) {
-				return false;
-			} else {
-				return true;
+			assert(index_current_child == 2); { // to make this case similar to previous (same indent level)
+        assert(this->children[1] == left_child);
+        assert(this->children[2] == current_child);
+        delete current_child;
+        this->children[2] = nullptr;
+        return true;
 			}
+
+
 		}
 		assert(right_child!=nullptr);
 		assert(right_child->size == 1);
@@ -248,21 +262,33 @@ struct TreeNode {
 		right_child->size = 2;
 		this->size--;
 
-		if (this->size == 1 && index_current_child == 0) {
+		if (this->size == 0) {
+      assert(this->children[0] == current_child);
+      assert(this->children[1] == right_child);
+      assert(this->children[2] == nullptr);
+      delete current_child;
+      this->children[0] = this->children[1];
+      this->children[1] = nullptr; // maybe not needed - this will be fixed in parent rebalance?
+      return false;
+    }
+		assert(this->size == 1);
+		if (index_current_child == 0) {
+      assert(this->children[0] == current_child);
+      assert(this->children[1] == right_child);
 			this->data[0] = this->data[1];
-			assert(current_child == children[0]);
 			delete current_child;
 			this->children[0] = this->children[1];
 			this->children[1] = this->children[2];
 			this->children[2] = nullptr;
 			return true;
 		}
-
-		if (this->size == 0) {
-			this->children[0] = this->children[1];
-			return false;
-		} else {
-			return true;
+		assert(index_current_child == 1); {
+      assert(this->children[1] == current_child);
+      assert(this->children[2] == right_child);
+      delete current_child;
+      this->children[1] = this->children[2];
+      this->children[2] = nullptr;
+      return true;
 		}
 
 	}
