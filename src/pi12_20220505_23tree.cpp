@@ -182,8 +182,9 @@ struct TreeNode {
 		}
 
 		if (right_child && right_child->size == 2) {
-			current_child->data[0] = this->data[index_current_child + 1];
-			this->data[index_current_child + 1] = right_child->data[0];
+		  assert(index_current_child < this->size);
+			current_child->data[0] = this->data[index_current_child]; // not index + 1
+			this->data[index_current_child] = right_child->data[0];
 			right_child->data[0] = right_child->data[1];
 
 			current_child->children[1] = right_child->children[0];
